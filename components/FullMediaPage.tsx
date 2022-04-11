@@ -5,13 +5,23 @@ import {
 	formatPicThumbs,
 	formatRatingClassName,
 } from '../lib/format'
-import { getDate, getProviders, getTitle } from '../lib/util'
-import { useAppSelector } from '../store/hooks'
+import {
+	getDate,
+	getLanguageFromCode,
+	getProviders,
+	getTitle,
+} from '../lib/util'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
 import Thumb from './Thumb'
 import { marked } from 'marked'
+import { AnimatePresence } from 'framer-motion'
+import MediaPreview from './MediaPreview'
+import { setPreview } from '../store/slices/media'
 
 const FullMediaPage = () => {
 	const countryCode = useAppSelector((state) => state.misc.country_code)
+	const { preview } = useAppSelector((state) => state.media)
+	const dispatch = useAppDispatch()
 
 	const { result, recommendations, providers, images, reviews } =
 		useAppSelector((state) => state.media.single)
@@ -33,6 +43,7 @@ const FullMediaPage = () => {
 
 	return (
 		<div className="media">
+			<AnimatePresence>{preview.id && <MediaPreview />}</AnimatePresence>
 			<header className="media__info">
 				<div className="media__info__backdrop">
 					<Image
@@ -57,6 +68,9 @@ const FullMediaPage = () => {
 						{result.vote_average}
 					</p>
 					<p className="media__info__votes__count">{result.vote_count}</p>
+				</div>
+				<div className="media__info__additional">
+					<p>{getLanguageFromCode(result.original_language as string)}</p>
 				</div>
 			</header>
 			<section className="media__reviews">
@@ -137,7 +151,9 @@ const FullMediaPage = () => {
 							<Thumb
 								className="thumb--small"
 								media={recommended}
-								onClick={() => {}}
+								onClick={() => {
+									dispatch(setPreview(recommended))
+								}}
 								key={idx}
 							/>
 						)

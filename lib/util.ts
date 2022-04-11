@@ -4,6 +4,7 @@ import { TVResult } from '../types/tv'
 import { formatDate } from './format'
 import { movieGenres, tvGenres } from '../lib/genres'
 import media from '../store/slices/media'
+import { langCodes } from './languages'
 
 export const getTitle = (media: TVResult | MovieResult) => {
 	if ('title' in media) return media?.title
@@ -12,11 +13,13 @@ export const getTitle = (media: TVResult | MovieResult) => {
 }
 
 export const getDate = (media: TVResult | MovieResult) => {
-	if ('release_date' in media) return formatDate(media.release_date as string)
-	if ('first_air_date' in media && 'last_air_date' in media)
-		return `${formatDate(media.first_air_date as string)}`
+	let date = ''
+	if ('release_date' in media) date = formatDate(media.release_date as string)
+	if ('first_air_date' in media) {
+		date = `${formatDate(media.first_air_date as string)}`
+	}
 
-	return ''
+	return date
 }
 
 export const getMediaType = (media: TVResult | MovieResult): string => {
@@ -49,4 +52,10 @@ export const getProviders = (cc: CountryCode) => {
 	if ('rent' in cc) output.rent = cc.rent as Provider[]
 
 	return output
+}
+
+export const getLanguageFromCode = (lang: string) => {
+	return langCodes.filter((lc) => lc.code === lang)[0].lang
+		? langCodes.filter((lc) => lc.code === lang)[0].lang
+		: ''
 }

@@ -34,7 +34,6 @@ const Layout: React.FC<{ children: any }> = ({ children }) => {
 	function randomAnimation(min: number, max: number) {
 		// min and max included
 		const rnd = Math.floor(Math.random() * (max - min + 1) + min)
-		console.log(`${`loader${rnd}`} 3s cubic-bezier(0.075, 0.82, 0.165, 1) both`)
 
 		return `${`loader${rnd}`} 3s cubic-bezier(0.075, 0.82, 0.165, 1) both`
 	}

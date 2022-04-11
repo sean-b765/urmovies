@@ -22,30 +22,33 @@ const Discover: NextPage<{ data: Props }> = ({ data }) => {
 	const { preview } = useAppSelector((state) => state.media)
 
 	return (
-		<div className="discover">
-			{!data?.success && <></>}
-			{data?.success && (
-				<>
-					<AnimatePresence exitBeforeEnter>
-						{preview.id && <MediaPreview />}
-					</AnimatePresence>
-					{data.result.map((media: any, key: number) => {
-						return (
-							<Thumb
-								key={key}
-								media={media}
-								className=""
-								onClick={() => {
-									console.log(media)
-
-									dispatch(setPreview(media))
-								}}
-							/>
-						)
-					})}
-				</>
-			)}
-		</div>
+		<>
+			<div className="discover">
+				{!data?.success && <></>}
+				{data?.success && (
+					<>
+						<AnimatePresence exitBeforeEnter>
+							{preview.id && <MediaPreview />}
+						</AnimatePresence>
+						{data.result.map((media: any, key: number) => {
+							return (
+								<Thumb
+									key={key}
+									media={media}
+									className=""
+									onClick={() => {
+										dispatch(setPreview(media))
+									}}
+								/>
+							)
+						})}
+					</>
+				)}
+			</div>
+			<div className="pagination">
+				{data.page} of {data.pages}
+			</div>
+		</>
 	)
 }
 
@@ -90,13 +93,19 @@ export async function getServerSideProps(context: any) {
 
 	const success = movies.success && tv.success
 
+	console.log(tv.pages, movies.pages)
+
 	return {
 		props: {
 			data: {
 				result,
 				success,
 				page: movies.page,
-				pages: Math.min(500, tv.pages, movies.pages),
+				pages: Math.min(
+					500,
+					tv.pages === 0 ? 500 : tv.pages,
+					movies.pages === 0 ? 500 : movies.pages
+				),
 			},
 		},
 	}

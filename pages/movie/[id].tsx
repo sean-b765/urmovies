@@ -2,15 +2,20 @@ import { NextPage } from 'next'
 import React from 'react'
 import FullMediaPage from '../../components/FullMediaPage'
 import { getMedia, getRecommendations } from '../../store/actions/media'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { useAppDispatch } from '../../store/hooks'
 import { setSingle } from '../../store/slices/media'
 import { SingleMovieResult } from '../../types/movies'
 
 const MoviePage: NextPage<{ data: SingleMovieResult }> = ({ data }) => {
 	const dispatch = useAppDispatch()
+
 	dispatch(setSingle(data))
 
-	return <FullMediaPage />
+	return (
+		<>
+			<FullMediaPage />
+		</>
+	)
 }
 
 export async function getServerSideProps(context: any) {

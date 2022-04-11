@@ -2,9 +2,17 @@ import React from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { motion } from 'framer-motion'
 import { removePreview } from '../store/slices/media'
-import { getGenreIds, getGenreName, getMediaType, getTitle } from '../lib/util'
+import {
+	getDate,
+	getGenreIds,
+	getGenreName,
+	getLanguageFromCode,
+	getMediaType,
+	getTitle,
+} from '../lib/util'
 import Image from 'next/image'
 import {
+	formatDate,
 	formatPic,
 	formatPicThumbs,
 	formatRatingClassName,
@@ -40,14 +48,18 @@ const MediaPreview = () => {
 									<span
 										className={`${formatRatingClassName(preview.vote_average)}`}
 									>
-										{preview.vote_average}
+										{Number(preview.vote_average).toFixed(1)}
 									</span>
 									<span>{preview.vote_count}</span>
 								</div>
 								<div className="genres">
 									{getGenreIds(preview)?.map((genre, idx) => {
 										return (
-											<Link href={`?genres=${genre}`} key={idx}>
+											<Link
+												href={`/?genres=${genre}`}
+												key={idx}
+												prefetch={false}
+											>
 												<a>
 													{
 														getGenreName(String(genre), getMediaType(preview))
@@ -58,6 +70,10 @@ const MediaPreview = () => {
 										)
 									})}
 								</div>
+								<p>
+									{getDate(preview)} |{' '}
+									{getLanguageFromCode(preview.original_language as string)}
+								</p>
 							</div>
 							<div className="bottom">
 								<h2>
@@ -66,8 +82,8 @@ const MediaPreview = () => {
 									</Link>
 								</h2>
 								<p>
-									{preview.overview?.substring(0, 300).trim()}
-									{Number(preview.overview?.length) > 300 ? '...' : ''}
+									{preview.overview?.substring(0, 250).trim()}
+									{Number(preview.overview?.length) > 250 ? '...' : ''}
 								</p>
 							</div>
 						</header>

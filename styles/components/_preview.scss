@@ -56,6 +56,11 @@
         .top {
           margin-left: .5rem;
 
+          > p {
+            padding: .5rem;
+            font-size: .8rem;
+          }
+
           .votes {
             span {
               margin-inline: .5rem;
@@ -65,11 +70,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 1rem;
+            flex-wrap: wrap;
+            margin-top: .5rem;
 
             > a {
+              white-space: nowrap;
               padding: .2rem .8rem;
               position: relative;
+              font-size: .9rem;
 
               &:first-child {
                 padding-left: 0.5rem;
@@ -85,7 +93,7 @@
                   position: absolute;
                   right: -0.4rem;
                   top: 50%;
-                  transform: translate(-100%, -50%);
+                  transform: translate(-150%, -50%);
                 }
               }
             }
