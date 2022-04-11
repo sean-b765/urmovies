@@ -1,0 +1,107 @@
+.preview {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.703);
+  z-index: 100;
+
+  .mediapreview {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row-reverse;
+    max-width: clamp(800px, 65vw, 1200px);
+    height: clamp(320px, 25vw, 500px);
+    border-radius: 7px;
+    overflow: hidden;
+
+    .card {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .btn--viewmore {
+        color: white;
+        font-size: 1rem;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 10;
+        opacity: .6;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      &__info {
+        position: relative;
+        color: white;
+        height: 100%;
+        padding: 1.3rem 1rem;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-direction: column;
+        
+        .top {
+          margin-left: .8rem;
+        }
+
+        .bottom {
+          h2 {
+            margin-bottom: 1rem;
+          }
+        }
+      }
+  
+      &__image {
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+  
+        &::after {
+          position: absolute;
+          content: '';
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.614);
+          transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
+        }
+      }
+    }
+
+    &__thumb {
+      margin: auto;
+      z-index: -3;
+      min-width: 280px;
+      height: 100%;
+      position: relative;
+
+      &::after {
+        position: absolute;
+        content: '';
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.189);
+        transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
+      }
+    }
+  }
+
+  @media screen and (max-width: 960px) {
+    display: none;
+  }
+}

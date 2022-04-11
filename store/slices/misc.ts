@@ -14,7 +14,7 @@ const initialState: InitialDataState = {
 }
 
 export const miscSlice = createSlice({
-	name: 'data',
+	name: 'misc',
 	initialState,
 	reducers: {},
 	extraReducers: (builder) => {

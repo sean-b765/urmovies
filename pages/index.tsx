@@ -1,7 +1,11 @@
+import { AnimatePresence } from 'framer-motion'
 import { NextPage } from 'next'
-import React from 'react'
+import React, { useState } from 'react'
+import MediaPreview from '../components/MediaPreview'
 import Thumb from '../components/Thumb'
-import { getDiscover } from '../services/media'
+import { getDiscover } from '../store/actions/media'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { setPreview } from '../store/slices/media'
 import { MovieResult } from '../types/movies'
 import { TVResult } from '../types/tv'
 
@@ -13,13 +17,31 @@ interface Props {
 }
 
 const Discover: NextPage<{ data: Props }> = ({ data }) => {
+	const dispatch = useAppDispatch()
+
+	const { preview } = useAppSelector((state) => state.media)
+
 	return (
 		<div className="discover">
 			{!data?.success && <></>}
 			{data?.success && (
 				<>
+					<AnimatePresence exitBeforeEnter>
+						{preview.id && <MediaPreview />}
+					</AnimatePresence>
 					{data.result.map((media: any, key: number) => {
-						return <Thumb key={key} media={media} className="" />
+						return (
+							<Thumb
+								key={key}
+								media={media}
+								className=""
+								onClick={() => {
+									console.log(media)
+
+									dispatch(setPreview(media))
+								}}
+							/>
+						)
 					})}
 				</>
 			)}
@@ -31,8 +53,14 @@ export async function getServerSideProps(context: any) {
 	const page = context.query.page
 
 	let result = []
-	const movies = await getDiscover(page ? `?page=${page}` : '', 'movie')
-	const tv = await getDiscover(page ? `?page=${page}` : '', 'tv')
+	const movies = await getDiscover({
+		page: page ? `?page=${page}` : '',
+		media: 'movie',
+	})
+	const tv = await getDiscover({
+		page: page ? `?page=${page}` : '',
+		media: 'tv',
+	})
 
 	if (!movies.success || !tv.success)
 		return {

@@ -1,27 +1,25 @@
 import { NextPage } from 'next'
 import React from 'react'
 import FullMediaPage from '../../components/FullMediaPage'
-import { getMedia, getRecommendations } from '../../services/media'
+import { getMedia, getRecommendations } from '../../store/actions/media'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { setSingle } from '../../store/slices/media'
 import { SingleMovieResult } from '../../types/movies'
 
 const MoviePage: NextPage<{ data: SingleMovieResult }> = ({ data }) => {
-	return (
-		<FullMediaPage
-			result={data.result}
-			recommendations={
-				data.recommendations?.success ? data.recommendations.result : []
-			}
-			providers={data.providers}
-			images={data.images}
-			reviews={data.reviews}
-		/>
-	)
+	const dispatch = useAppDispatch()
+	dispatch(setSingle(data))
+
+	return <FullMediaPage />
 }
 
 export async function getServerSideProps(context: any) {
-	const result = await getMedia(context.query.id, 'movie')
+	const result = await getMedia({ mediaId: context.query.id, media: 'movie' })
 
-	const recommendations = await getRecommendations(context.query.id, 'movie')
+	const recommendations = await getRecommendations({
+		mediaId: context.query.id,
+		media: 'movie',
+	})
 
 	return {
 		props: { data: { ...result, recommendations } },

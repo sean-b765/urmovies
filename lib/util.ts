@@ -10,9 +10,9 @@ export const getTitle = (media: TVResult | MovieResult) => {
 }
 
 export const getDate = (media: TVResult | MovieResult) => {
-	if ('release_date' in media) return formatDate(media.release_date)
+	if ('release_date' in media) return formatDate(media.release_date as string)
 	if ('first_air_date' in media && 'last_air_date' in media)
-		return `${formatDate(media.first_air_date)}`
+		return `${formatDate(media.first_air_date as string)}`
 
 	return ''
 }

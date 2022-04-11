@@ -1,6 +1,10 @@
 import Image from 'next/image'
 import React from 'react'
-import { formatPicOriginal, formatPicThumbs } from '../lib/format'
+import {
+	formatPicOriginal,
+	formatPicThumbs,
+	formatRatingClassName,
+} from '../lib/format'
 import { getDate, getProviders, getTitle } from '../lib/util'
 import { useAppSelector } from '../store/hooks'
 import { Images, Providers, TMDBReview } from '../types/common'
@@ -9,14 +13,11 @@ import { TVResult } from '../types/tv'
 import Thumb from './Thumb'
 import { marked } from 'marked'
 
-const FullMediaPage: React.FC<{
-	result: MovieResult | TVResult
-	recommendations: MovieResult[] | TVResult[]
-	providers: Providers
-	images: Images
-	reviews: TMDBReview[]
-}> = ({ result, recommendations, providers, images, reviews }) => {
+const FullMediaPage = () => {
 	const countryCode = useAppSelector((state) => state.misc.country_code)
+
+	const { result, recommendations, providers, images, reviews } =
+		useAppSelector((state) => state.media.single)
 
 	const watchProviders = getProviders(providers[countryCode])
 
@@ -38,7 +39,7 @@ const FullMediaPage: React.FC<{
 			<header className="media__info">
 				<div className="media__info__backdrop">
 					<Image
-						src={formatPicOriginal(result.backdrop_path)}
+						src={formatPicOriginal(result?.backdrop_path as string)}
 						layout="fill"
 						objectFit="cover"
 						objectPosition="top"
@@ -51,7 +52,13 @@ const FullMediaPage: React.FC<{
 
 				<p className="media__info__date">{getDate(result)}</p>
 				<div className="media__info__votes">
-					<p className="media__info__votes__average">{result.vote_average}</p>
+					<p
+						className={`media__info__votes__average ${formatRatingClassName(
+							result.vote_average
+						)}`}
+					>
+						{result.vote_average}
+					</p>
 					<p className="media__info__votes__count">{result.vote_count}</p>
 				</div>
 			</header>
@@ -128,7 +135,7 @@ const FullMediaPage: React.FC<{
 			<section className="media__gallery"></section>
 			<section className="media__recommended">
 				<div className="media__recommended__wrapper">
-					{recommendations?.map((recommended, idx) => {
+					{recommendations?.result.map((recommended, idx) => {
 						return (
 							<Thumb className="thumb--small" media={recommended} key={idx} />
 						)

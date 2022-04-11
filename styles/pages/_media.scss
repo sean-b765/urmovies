@@ -111,6 +111,15 @@
     padding: 2rem 4rem;
     color: white;
 
+    &__votes {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      >* {
+        margin: .5rem;
+      }
+    }
+
     &__overview, &__title {
       max-width: 900px;
       margin: 1rem;
