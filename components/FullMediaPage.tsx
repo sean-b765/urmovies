@@ -62,7 +62,7 @@ const FullMediaPage = () => {
 			<section className="media__reviews">
 				{reviews.map((review, idx) => {
 					return (
-						<div className="review">
+						<div className="review" key={idx}>
 							<header>
 								<p>{review.author_details.rating}</p>
 								<p>{review.author}</p>
