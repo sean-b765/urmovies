@@ -7,9 +7,6 @@ import {
 } from '../lib/format'
 import { getDate, getProviders, getTitle } from '../lib/util'
 import { useAppSelector } from '../store/hooks'
-import { Images, Providers, TMDBReview } from '../types/common'
-import { MovieResult } from '../types/movies'
-import { TVResult } from '../types/tv'
 import Thumb from './Thumb'
 import { marked } from 'marked'
 
@@ -137,7 +134,12 @@ const FullMediaPage = () => {
 				<div className="media__recommended__wrapper">
 					{recommendations?.result.map((recommended, idx) => {
 						return (
-							<Thumb className="thumb--small" media={recommended} key={idx} />
+							<Thumb
+								className="thumb--small"
+								media={recommended}
+								onClick={() => {}}
+								key={idx}
+							/>
 						)
 					})}
 				</div>
