@@ -2,6 +2,8 @@ import { CountryCode, Provider } from '../types/common'
 import { MovieResult } from '../types/movies'
 import { TVResult } from '../types/tv'
 import { formatDate } from './format'
+import { movieGenres, tvGenres } from '../lib/genres'
+import media from '../store/slices/media'
 
 export const getTitle = (media: TVResult | MovieResult) => {
 	if ('title' in media) return media?.title
@@ -17,9 +19,21 @@ export const getDate = (media: TVResult | MovieResult) => {
 	return ''
 }
 
-export const getMediaType = (media: TVResult | MovieResult) => {
-	if ('media_type' in media) return media.media_type
-	if ('type' in media) return media.type
+export const getMediaType = (media: TVResult | MovieResult): string => {
+	if ('media_type' in media) return `${media.media_type}`
+	if ('type' in media) return `${media.type}`
+	return ''
+}
+
+export const getGenreIds = (media: TVResult | MovieResult) => {
+	if ('genre_ids' in media) return media.genre_ids
+}
+
+export const getGenreName = (id: string, mediaType: string) => {
+	const _id = Number(id)
+	return mediaType === 'movie'
+		? movieGenres.filter((genre) => genre.id === _id)[0]
+		: tvGenres.filter((genre) => genre.id === _id)[0]
 }
 
 export const getProviders = (cc: CountryCode) => {

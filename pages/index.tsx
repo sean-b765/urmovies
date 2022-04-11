@@ -51,15 +51,18 @@ const Discover: NextPage<{ data: Props }> = ({ data }) => {
 
 export async function getServerSideProps(context: any) {
 	const page = context.query.page
+	const genres = context?.query?.genres?.split(',') || []
 
 	let result = []
 	const movies = await getDiscover({
 		page: page ? `?page=${page}` : '',
 		media: 'movie',
+		genres,
 	})
 	const tv = await getDiscover({
 		page: page ? `?page=${page}` : '',
 		media: 'tv',
+		genres,
 	})
 
 	if (!movies.success || !tv.success)

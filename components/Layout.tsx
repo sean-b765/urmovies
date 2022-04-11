@@ -1,22 +1,43 @@
 import Head from 'next/head'
+import { useRouter, Router } from 'next/router'
 import React, { useEffect } from 'react'
 import emitter from '../services/eventEmitter'
 import { getGeolocation } from '../store/actions/geoloc'
-import { useAppDispatch } from '../store/hooks'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { removePreview } from '../store/slices/media'
+import { setLoading } from '../store/slices/misc'
 
 const Layout: React.FC<{ children: any }> = ({ children }) => {
 	const dispatch = useAppDispatch()
+	const router = useRouter()
+	const { loading } = useAppSelector((state) => state.misc)
 
 	dispatch(getGeolocation())
 
 	useEffect(() => {
-		emitter.on('AXIOS_START', () => {
-			console.log('start')
+		Router.events.on('routeChangeStart', () => {
+			dispatch(setLoading(true))
 		})
-		emitter.on('AXIOS_FINISH', () => {
-			console.log('fin')
+
+		Router.events.on('routeChangeComplete', () => {
+			dispatch(setLoading(false))
+		})
+		Router.events.on('routeChangeError', () => {
+			dispatch(setLoading(false))
 		})
 	}, [])
+
+	useEffect(() => {
+		dispatch(removePreview())
+	}, [router])
+
+	function randomAnimation(min: number, max: number) {
+		// min and max included
+		const rnd = Math.floor(Math.random() * (max - min + 1) + min)
+		console.log(`${`loader${rnd}`} 3s cubic-bezier(0.075, 0.82, 0.165, 1) both`)
+
+		return `${`loader${rnd}`} 3s cubic-bezier(0.075, 0.82, 0.165, 1) both`
+	}
 
 	return (
 		<>
@@ -32,6 +53,18 @@ const Layout: React.FC<{ children: any }> = ({ children }) => {
 					rel="stylesheet"
 				/>
 			</Head>
+			<div className="loader">
+				<div
+					className={
+						loading
+							? 'loader__progress loader__progress--loading'
+							: 'loader__progress'
+					}
+					style={{
+						animation: loading ? randomAnimation(1, 2) : 'none',
+					}}
+				></div>
+			</div>
 			<main>{children}</main>
 		</>
 	)

@@ -2,7 +2,7 @@ import React from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { motion } from 'framer-motion'
 import { removePreview } from '../store/slices/media'
-import { getMediaType, getTitle } from '../lib/util'
+import { getGenreIds, getGenreName, getMediaType, getTitle } from '../lib/util'
 import Image from 'next/image'
 import {
 	formatPic,
@@ -23,39 +23,55 @@ const MediaPreview = () => {
 			transition={{ duration: 0.48 }}
 			className="preview"
 			onClick={(e: any) => {
-				if (e.target.dataset.noclick) return
+				if (!e.target.dataset.canclick) return
 				dispatch(removePreview())
 			}}
+			data-canclick
 		>
 			{preview.id && (
-				<div className="mediapreview" data-noclick>
-					<div className="card" data-noclick>
+				<div className="mediapreview">
+					<div className="card">
 						<Link href={`/${getMediaType(preview)}/${preview.id}`}>
-							<a className="btn btn--viewmore" data-noclick>
-								View More
-							</a>
+							<a className="btn btn--viewmore">View More</a>
 						</Link>
-						<header className="card__info" data-noclick>
+						<header className="card__info">
 							<div className="top">
-								<span
-									className={`${formatRatingClassName(preview.vote_average)}`}
-								>
-									{preview.vote_average}
-								</span>
+								<div className="votes">
+									<span
+										className={`${formatRatingClassName(preview.vote_average)}`}
+									>
+										{preview.vote_average}
+									</span>
+									<span>{preview.vote_count}</span>
+								</div>
+								<div className="genres">
+									{getGenreIds(preview)?.map((genre, idx) => {
+										return (
+											<Link href={`?genres=${genre}`} key={idx}>
+												<a>
+													{
+														getGenreName(String(genre), getMediaType(preview))
+															.name
+													}
+												</a>
+											</Link>
+										)
+									})}
+								</div>
 							</div>
 							<div className="bottom">
-								<h2 data-noclick>
+								<h2>
 									<Link href={`/${getMediaType(preview)}/${preview.id}`}>
-										<a data-noclick>{getTitle(preview)}</a>
+										<a>{getTitle(preview)}</a>
 									</Link>
 								</h2>
-								<p data-noclick>
+								<p>
 									{preview.overview?.substring(0, 300).trim()}
 									{Number(preview.overview?.length) > 300 ? '...' : ''}
 								</p>
 							</div>
 						</header>
-						<div className="card__image" data-noclick>
+						<div className="card__image">
 							{preview.backdrop_path && (
 								<Image
 									src={formatPic(preview.backdrop_path as string)}
@@ -65,7 +81,7 @@ const MediaPreview = () => {
 							)}
 						</div>
 					</div>
-					<div className="mediapreview__thumb" data-noclick>
+					<div className="mediapreview__thumb">
 						{preview.poster_path && (
 							<Image
 								src={formatPicThumbs(preview.poster_path as string)}

@@ -78,6 +78,7 @@ export interface TVResult {
 	episode_run_time?: number[]
 	first_air_date?: string
 	genres?: Genre[]
+	genre_ids?: number[]
 	homepage?: string
 	id?: number
 	in_production?: boolean

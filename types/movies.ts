@@ -23,7 +23,7 @@ export interface MovieResult {
 	backdrop_path?: string
 	belongs_to_collection?: any
 	budget?: number
-	genres?: Genre[]
+	genres_ids: number[]
 	homepage?: string
 	id?: number
 	imdb_id?: string
