@@ -22,6 +22,7 @@ import Link from 'next/link'
 const MediaPreview = () => {
 	const { preview } = useAppSelector((state) => state.media)
 	const dispatch = useAppDispatch()
+	console.log(preview)
 
 	return (
 		<motion.div
@@ -93,6 +94,7 @@ const MediaPreview = () => {
 									src={formatPic(preview.backdrop_path as string)}
 									layout="fill"
 									objectFit="cover"
+									priority={true}
 								/>
 							)}
 						</div>

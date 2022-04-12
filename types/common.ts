@@ -58,6 +58,21 @@ export interface Images {
 	posters: Poster[]
 }
 
+export interface Cast {
+	adult?: boolean
+	gender?: number | null
+	id?: number
+	known_for_department?: string
+	name?: string
+	original_name?: string
+	popularity?: string
+	profile_path?: string | null
+	cast_id?: number
+	character?: string
+	credit_id?: string
+	order?: number
+}
+
 export interface TMDBReview {
 	author: string
 	author_details: {

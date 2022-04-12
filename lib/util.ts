@@ -30,9 +30,10 @@ export const getMediaType = (media: TVResult | MovieResult): string => {
 
 export const getGenreIds = (media: TVResult | MovieResult) => {
 	if ('genre_ids' in media) return media.genre_ids
+	if ('genres' in media) return media.genres
 }
 
-export const getGenreName = (id: string, mediaType: string) => {
+export const getGenreName = (id: string, mediaType?: string) => {
 	const _id = Number(id)
 	return mediaType === 'movie'
 		? movieGenres.filter((genre) => genre.id === _id)[0]

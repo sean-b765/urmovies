@@ -1,4 +1,4 @@
-import { Genre, Images, Providers, TMDBReview } from './common'
+import { Cast, Genre, Images, Providers, TMDBReview } from './common'
 
 interface CreatedBy {
 	id: number
@@ -112,6 +112,11 @@ export interface SingleTVResult {
 	reviews: TMDBReview[]
 	images: Images
 	providers: Providers
+	cast: {
+		id: number
+		cast: Array<Cast>
+		crew: Array<any>
+	}
 	recommendations?: {
 		result: TVResult[]
 		success: boolean

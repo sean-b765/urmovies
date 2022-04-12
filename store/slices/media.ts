@@ -23,6 +23,11 @@ const initialState: InitialDataState = {
 			result: [],
 			success: false,
 		},
+		cast: {
+			cast: [],
+			crew: [],
+			id: 0,
+		},
 	},
 	preview: {},
 }
