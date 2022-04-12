@@ -224,7 +224,7 @@ const FullMediaPage = () => {
 					<div className="gallery">
 						{images.backdrops.slice(0, 5).map((image, idx) => {
 							return (
-								<div className="gallery__image">
+								<div key={idx} className="gallery__image">
 									<Image
 										src={formatPicOriginal(image.file_path)}
 										// layout="fill"
@@ -237,7 +237,7 @@ const FullMediaPage = () => {
 						})}
 						{images.posters.slice(0, 5).map((image, idx) => {
 							return (
-								<div className="gallery__image">
+								<div key={idx} className="gallery__image">
 									<Image
 										src={formatPicOriginal(image.file_path)}
 										// layout="fill"
