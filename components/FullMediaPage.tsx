@@ -24,6 +24,7 @@ import Link from 'next/link'
 import { Genre } from '../types/common'
 import { AiFillStar } from 'react-icons/ai'
 import { BsFillPersonFill } from 'react-icons/bs'
+import HorizontalScrollList from './HorizontalScrollList'
 
 const FullMediaPage = () => {
 	const { country_code: countryCode, loading } = useAppSelector(
@@ -107,33 +108,35 @@ const FullMediaPage = () => {
 			{cast.cast?.length ? (
 				<>
 					<section className="media__cast">
-						{cast.cast.map((actor, idx) => {
-							return actor.profile_path ? (
-								<div className="cast">
-									{actor.profile_path ? (
-										<>
-											<div className="cast__image">
-												<Image
-													src={formatPicThumbs(actor.profile_path as string)}
-													layout="fill"
-													objectFit="cover"
-												></Image>
-											</div>
-											<div className="cast__info">
-												<p className="name">{actor.name}</p>
-												{actor.character && (
-													<p className="character">as {actor.character}</p>
-												)}
-											</div>
-										</>
-									) : (
-										<></>
-									)}
-								</div>
-							) : (
-								<></>
-							)
-						})}
+						<HorizontalScrollList>
+							{cast.cast.map((person, idx) => {
+								return person.profile_path ? (
+									<div className="cast" key={idx}>
+										{person.profile_path ? (
+											<>
+												<div className="cast__image">
+													<Image
+														src={formatPicThumbs(person.profile_path as string)}
+														layout="fill"
+														objectFit="cover"
+													></Image>
+												</div>
+												<div className="cast__info">
+													<p className="name">{person.name}</p>
+													{person.character && (
+														<p className="character">as {person.character}</p>
+													)}
+												</div>
+											</>
+										) : (
+											<></>
+										)}
+									</div>
+								) : (
+									<></>
+								)
+							})}
+						</HorizontalScrollList>
 					</section>
 				</>
 			) : (
@@ -256,18 +259,20 @@ const FullMediaPage = () => {
 			{recommendations?.result.length ? (
 				<section className="media__recommended" ref={recommendationsRef}>
 					<div className="media__recommended__wrapper">
-						{recommendations?.result.map((recommended, idx) => {
-							return (
-								<Thumb
-									className="thumb--small"
-									media={recommended}
-									onClick={() => {
-										dispatch(setPreview(recommended))
-									}}
-									key={idx}
-								/>
-							)
-						})}
+						<HorizontalScrollList>
+							{recommendations?.result.map((recommended, idx) => {
+								return (
+									<Thumb
+										className="thumb--small"
+										media={recommended}
+										onClick={() => {
+											dispatch(setPreview(recommended))
+										}}
+										key={idx}
+									/>
+								)
+							})}
+						</HorizontalScrollList>
 					</div>
 				</section>
 			) : (
