@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { getGeolocation } from '../actions/geoloc'
+import { getGeolocationThunk } from '../actions/geoloc'
 
 export interface InitialDataState {
 	country_code: string
@@ -25,8 +25,8 @@ export const miscSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(getGeolocation.pending, (state) => {})
-			.addCase(getGeolocation.fulfilled, (state, action) => {
+			.addCase(getGeolocationThunk.pending, (state) => {})
+			.addCase(getGeolocationThunk.fulfilled, (state, action) => {
 				if (action.payload.message) return
 
 				state.time_zone = action.payload?.result?.time_zone

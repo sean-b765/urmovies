@@ -33,11 +33,12 @@ export const getGenreIds = (media: TVResult | MovieResult) => {
 	if ('genres' in media) return media.genres
 }
 
-export const getGenreName = (id: string, mediaType?: string) => {
+export const getGenreName = (id: string, mediaType: string) => {
 	const _id = Number(id)
+
 	return mediaType === 'movie'
-		? movieGenres.filter((genre) => genre.id === _id)[0]
-		: tvGenres.filter((genre) => genre.id === _id)[0]
+		? movieGenres.filter((genre) => genre.id === _id)[0]?.name
+		: tvGenres.filter((genre) => genre.id === _id)[0]?.name
 }
 
 export const getProviders = (cc: CountryCode) => {
@@ -59,4 +60,20 @@ export const getLanguageFromCode = (lang: string) => {
 	return langCodes.filter((lc) => lc.code === lang)[0].lang
 		? langCodes.filter((lc) => lc.code === lang)[0].lang
 		: ''
+}
+
+export const getRuntime = (media: TVResult | MovieResult) => {
+	if ('runtime' in media) return Number(media.runtime)
+	if ('episode_run_time' in media) return Number(media.episode_run_time)
+	return 0
+}
+
+export const getRevenue = (media: TVResult | MovieResult) => {
+	if ('revenue' in media) return Number(media.revenue)
+	return 0
+}
+
+export const getBudget = (media: TVResult | MovieResult) => {
+	if ('budget' in media) return Number(media.budget)
+	return 0
 }

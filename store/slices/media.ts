@@ -5,6 +5,7 @@ import { SingleTVResult, TVResult } from '../../types/tv'
 export interface InitialDataState {
 	single: SingleMovieResult | SingleTVResult
 	preview: MovieResult | TVResult
+	showPreview: boolean
 }
 
 const initialState: InitialDataState = {
@@ -30,6 +31,7 @@ const initialState: InitialDataState = {
 		},
 	},
 	preview: {},
+	showPreview: false,
 }
 
 export const mediaSlice = createSlice({
@@ -44,9 +46,13 @@ export const mediaSlice = createSlice({
 		},
 		setPreview(state, action: PayloadAction<MovieResult | TVResult>) {
 			state.preview = action.payload
+			state.showPreview = true
+		},
+		togglePreview(state) {
+			state.showPreview = !state.showPreview
 		},
 		removePreview(state) {
-			state.preview = {}
+			state.showPreview = false
 		},
 	},
 })

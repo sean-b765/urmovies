@@ -1,5 +1,15 @@
+$dark: #00171f;
+$light: rgb(239, 235, 235);
+$blue: #007EA7;
+$blue-light: #0caff0;
+
 @import './components/index';
 @import './pages/index';
+
+body {
+  background: $dark;
+  color: $light;
+}
 
 .green {
   color: rgb(23, 234, 23);
@@ -28,17 +38,20 @@ a {
   scroll-behavior: smooth;
 
   &::-webkit-scrollbar {
-    background: rgb(151, 54, 54);
+    background: #007ea7;
   }
   &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.205);
+    background: rgba(0, 0, 0, 0.263);
 
     &:active {
-      background: rgba(255, 255, 255, 0.42);
+      background: rgba(0, 0, 0, 0.42);
     }
   }
 }
 
+li {
+  list-style: none;
+}
 
 .loader {
   position: fixed;

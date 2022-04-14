@@ -6,12 +6,14 @@ import { MovieResult } from '../types/movies'
 import { TVResult } from '../types/tv'
 import { formatPicThumbs, formatRatingClassName } from '../lib/format'
 import { getMediaType, getTitle } from '../lib/util'
+import { blacklisted } from '../lib/blacklisted'
 
 const Thumb: React.FC<{
 	media: MovieResult | TVResult
 	className: string
 	onClick: Function
 }> = ({ media, className, onClick }) => {
+	if (blacklisted.includes(String(media.id))) return <></>
 	return (
 		<section
 			className={`thumb ${className}`}
@@ -33,7 +35,7 @@ const Thumb: React.FC<{
 						href={
 							getMediaType(media) === 'tv'
 								? `/tv/${media.id}`
-								: `/movie/${media.id}`
+								: `/movies/${media.id}`
 						}
 					>
 						<a data-noclick>{getTitle(media)}</a>

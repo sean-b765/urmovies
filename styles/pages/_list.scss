@@ -1,9 +1,11 @@
-.discover {
+.list {
   display: grid;
   gap: .8rem;
   justify-items: center;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   padding: 3rem 2rem;
+  padding-top: 6rem;
+
   > * {
     width: 100%;
   }

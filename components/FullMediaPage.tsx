@@ -1,17 +1,21 @@
 import Image from 'next/image'
 import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import {
+	formatLargeNumbers,
 	formatPicOriginal,
 	formatPicThumbs,
 	formatRatingClassName,
 } from '../lib/format'
 import {
+	getBudget,
 	getDate,
 	getGenreIds,
 	getGenreName,
 	getLanguageFromCode,
 	getMediaType,
 	getProviders,
+	getRevenue,
+	getRuntime,
 	getTitle,
 } from '../lib/util'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
@@ -23,19 +27,24 @@ import { setPreview } from '../store/slices/media'
 import Link from 'next/link'
 import { Genre } from '../types/common'
 import { AiFillStar } from 'react-icons/ai'
-import { BsFillPersonFill } from 'react-icons/bs'
+import { BsFillPersonFill, BsCalendarDate } from 'react-icons/bs'
+import { BiTime } from 'react-icons/bi'
+import { IoLanguageSharp } from 'react-icons/io5'
+
 import HorizontalScrollList from './HorizontalScrollList'
 
 const FullMediaPage = () => {
 	const { country_code: countryCode, loading } = useAppSelector(
 		(state) => state.misc
 	)
-	const { preview } = useAppSelector((state) => state.media)
+	const { preview, showPreview } = useAppSelector((state) => state.media)
 	const dispatch = useAppDispatch()
 	const recommendationsRef = useRef<any>()
 
 	const { result, recommendations, providers, images, reviews, cast } =
 		useAppSelector((state) => state.media.single)
+
+	console.log(result)
 
 	const watchProviders = getProviders(providers[countryCode])
 
@@ -53,12 +62,14 @@ const FullMediaPage = () => {
 	}
 
 	useEffect(() => {
+		if (!recommendationsRef?.current) return
 		if (!loading) recommendationsRef.current.scrollLeft = 0
 	}, [loading])
 
 	return (
 		<div className="media">
-			<AnimatePresence>{preview.id && <MediaPreview />}</AnimatePresence>
+			<AnimatePresence>{showPreview && <MediaPreview />}</AnimatePresence>
+
 			<header className="media__info">
 				<div className="media__info__backdrop">
 					<Image
@@ -69,11 +80,10 @@ const FullMediaPage = () => {
 					></Image>
 				</div>
 
-				<h1 className="media__info__title">{getTitle(result)}</h1>
+				<div className="media__info__title">
+					<h1>{getTitle(result)}</h1>
+				</div>
 
-				<p className="media__info__overview">{result.overview}</p>
-
-				<p className="media__info__date">{getDate(result)}</p>
 				<div className="media__info__votes">
 					<p
 						className={`media__info__votes__average ${formatRatingClassName(
@@ -85,26 +95,61 @@ const FullMediaPage = () => {
 					</p>
 					<p className="media__info__votes__count">
 						<BsFillPersonFill />
-						{result.vote_count}
+						{formatLargeNumbers(Number(result.vote_count))}
 					</p>
 				</div>
+				<p className="media__info__overview">{result.overview}</p>
+
+				<div className="media__info__genres">
+					{getGenreIds(result)?.map((genre, idx) => {
+						return (
+							<Link
+								href={`/?genres=${(genre as Genre).id}`}
+								key={idx}
+								prefetch={false}
+							>
+								<a>{String((genre as Genre).name)}</a>
+							</Link>
+						)
+					})}
+				</div>
+
 				<div className="media__info__additional">
-					<p>{getLanguageFromCode(result.original_language as string)}</p>
-					<div className="genres">
-						{getGenreIds(result)?.map((genre, idx) => {
-							return (
-								<Link
-									href={`/?genres=${(genre as Genre).id}`}
-									key={idx}
-									prefetch={false}
-								>
-									<a>{String((genre as Genre).name)}</a>
-								</Link>
-							)
-						})}
+					<div className="lang-date">
+						<p>
+							<IoLanguageSharp />
+							{getLanguageFromCode(result.original_language as string)}
+						</p>
+						<p>
+							<BsCalendarDate />
+							{getDate(result)}
+						</p>
+						{getRuntime(result) !== 0 && (
+							<p>
+								<BiTime />
+								{getRuntime(result)}m
+							</p>
+						)}
 					</div>
+					{getRevenue(result) || getBudget(result) ? (
+						<div className="revenue-budget">
+							{getRevenue(result) ? (
+								<p>Box Office ${formatLargeNumbers(getRevenue(result))}</p>
+							) : (
+								<></>
+							)}
+							{getBudget(result) ? (
+								<p>Budget ${formatLargeNumbers(getBudget(result))}</p>
+							) : (
+								<></>
+							)}
+						</div>
+					) : (
+						<></>
+					)}
 				</div>
 			</header>
+
 			{cast.cast?.length ? (
 				<>
 					<section className="media__cast">

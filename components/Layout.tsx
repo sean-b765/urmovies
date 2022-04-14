@@ -1,18 +1,18 @@
 import Head from 'next/head'
 import { useRouter, Router } from 'next/router'
 import React, { useEffect } from 'react'
-import emitter from '../services/eventEmitter'
-import { getGeolocation } from '../store/actions/geoloc'
+import { getGeolocationThunk } from '../store/actions/geoloc'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { removePreview } from '../store/slices/media'
 import { setLoading } from '../store/slices/misc'
+import Navbar from './Navbar/Navbar'
 
 const Layout: React.FC<{ children: any }> = ({ children }) => {
 	const dispatch = useAppDispatch()
 	const router = useRouter()
 	const { loading } = useAppSelector((state) => state.misc)
 
-	dispatch(getGeolocation())
+	dispatch(getGeolocationThunk())
 
 	useEffect(() => {
 		Router.events.on('routeChangeStart', () => {
@@ -64,6 +64,7 @@ const Layout: React.FC<{ children: any }> = ({ children }) => {
 					}}
 				></div>
 			</div>
+			<Navbar />
 			<main>{children}</main>
 		</>
 	)

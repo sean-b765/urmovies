@@ -22,7 +22,6 @@ import Link from 'next/link'
 const MediaPreview = () => {
 	const { preview } = useAppSelector((state) => state.media)
 	const dispatch = useAppDispatch()
-	console.log(preview)
 
 	return (
 		<motion.div
@@ -37,79 +36,78 @@ const MediaPreview = () => {
 			}}
 			data-canclick
 		>
-			{preview.id && (
-				<div className="mediapreview">
-					<div className="card">
-						<Link href={`/${getMediaType(preview)}/${preview.id}`}>
-							<a className="btn btn--viewmore">View More</a>
-						</Link>
-						<header className="card__info">
-							<div className="top">
-								<div className="votes">
-									<span
-										className={`${formatRatingClassName(preview.vote_average)}`}
-									>
-										{Number(preview.vote_average).toFixed(1)}
-									</span>
-									<span>{preview.vote_count}</span>
-								</div>
-								<div className="genres">
-									{getGenreIds(preview)?.map((genre, idx) => {
-										return (
-											<Link
-												href={`/?genres=${genre}`}
-												key={idx}
-												prefetch={false}
-											>
-												<a>
-													{
-														getGenreName(String(genre), getMediaType(preview))
-															.name
-													}
-												</a>
-											</Link>
-										)
-									})}
-								</div>
-								<p>
-									{getDate(preview)} |{' '}
-									{getLanguageFromCode(preview.original_language as string)}
-								</p>
+			<div className="mediapreview">
+				<div className="card">
+					<Link
+						href={`/${getMediaType(preview) === 'movie' ? 'movies' : 'tv'}/${
+							preview.id
+						}`}
+					>
+						<a className="btn btn--viewmore">View More</a>
+					</Link>
+					<header className="card__info">
+						<div className="top">
+							<div className="votes">
+								<span
+									className={`${formatRatingClassName(preview.vote_average)}`}
+								>
+									{Number(preview.vote_average).toFixed(1)}
+								</span>
+								<span>{preview.vote_count}</span>
 							</div>
-							<div className="bottom">
-								<h2>
-									<Link href={`/${getMediaType(preview)}/${preview.id}`}>
-										<a>{getTitle(preview)}</a>
-									</Link>
-								</h2>
-								<p>
-									{preview.overview?.substring(0, 250).trim()}
-									{Number(preview.overview?.length) > 250 ? '...' : ''}
-								</p>
+							<div className="genres">
+								{getGenreIds(preview)?.map((genre, idx) => {
+									return (
+										<Link href={`/?genres=${genre}`} key={idx}>
+											<a>
+												{getGenreName(String(genre), getMediaType(preview))}
+											</a>
+										</Link>
+									)
+								})}
 							</div>
-						</header>
-						<div className="card__image">
-							{preview.backdrop_path && (
-								<Image
-									src={formatPic(preview.backdrop_path as string)}
-									layout="fill"
-									objectFit="cover"
-									priority={true}
-								/>
-							)}
+							<p>
+								{getDate(preview)} |{' '}
+								{getLanguageFromCode(preview.original_language as string)}
+							</p>
 						</div>
-					</div>
-					<div className="mediapreview__thumb">
-						{preview.poster_path && (
+						<div className="bottom">
+							<h2>
+								<Link
+									href={`/${
+										getMediaType(preview) === 'movie' ? 'movies' : 'tv'
+									}/${preview.id}`}
+								>
+									<a>{getTitle(preview)}</a>
+								</Link>
+							</h2>
+							<p>
+								{preview.overview?.substring(0, 250).trim()}
+								{Number(preview.overview?.length) > 250 ? '...' : ''}
+							</p>
+						</div>
+					</header>
+					<div className="card__image">
+						{preview.backdrop_path && (
 							<Image
-								src={formatPicThumbs(preview.poster_path as string)}
+								src={formatPic(preview.backdrop_path as string)}
 								layout="fill"
 								objectFit="cover"
+								priority={true}
 							/>
 						)}
 					</div>
 				</div>
-			)}
+				<div className="mediapreview__thumb">
+					{preview.poster_path && (
+						<Image
+							src={formatPicThumbs(preview.poster_path as string)}
+							layout="fill"
+							objectFit="cover"
+						/>
+					)}
+				</div>
+			</div>
 		</motion.div>
 	)
 }

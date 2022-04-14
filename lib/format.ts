@@ -14,3 +14,13 @@ export const formatDate = (YYYYMMDD: string) =>
 
 export const formatRatingClassName = (rating: any) =>
 	Number(rating) > 5 ? (Number(rating) > 7.7 ? 'green' : 'yellow') : 'red'
+
+export const formatLargeNumbers = (num: number) => {
+	if (num > 1_000_000_000)
+		return `${parseFloat(Number(num / 1000000000).toFixed(2))}B`
+	if (num > 1_000_000) return `${parseFloat(Number(num / 1000000).toFixed(2))}M`
+	else if (num > 100_000) return `${parseFloat(Number(num / 1000).toFixed(1))}K`
+	else if (num > 10_000) return `${parseFloat(Number(num / 1000).toFixed(1))}K`
+	else if (num > 1_000) return `${parseFloat(Number(num / 1000).toFixed(1))}K`
+	else return `${num}`
+}

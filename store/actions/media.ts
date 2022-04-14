@@ -50,3 +50,117 @@ export const getRecommendations = async (options: {
 		return { success: false }
 	}
 }
+
+export const getPopular = async (options: {
+	page: string
+	media: 'tv' | 'movie'
+	genres: string[]
+	region: string
+}) => {
+	const { media, page, genres, region } = options
+
+	let _genres = genres.length !== 0 ? `genres=${genres.join(',')}` : ''
+
+	if (page) _genres = `&${_genres}`
+	else _genres = `?${_genres}`
+
+	try {
+		const result = await API.get(
+			`/api/v1/media/popular/${media}${page}${_genres}&region=${region}`
+		)
+		return result.data
+	} catch (err) {
+		return { success: false }
+	}
+}
+
+export const getPlaying = async (options: {
+	page: string
+	media: 'tv' | 'movie'
+	genres: string[]
+	region: string
+}) => {
+	const { media, page, genres, region } = options
+
+	let _genres = genres.length !== 0 ? `genres=${genres.join(',')}` : ''
+
+	if (page) _genres = `&${_genres}`
+	else _genres = `?${_genres}`
+
+	try {
+		const result = await API.get(
+			`/api/v1/media/now-playing/${media}${page}${_genres}&region=${region}`
+		)
+		return result.data
+	} catch (err) {
+		return { success: false }
+	}
+}
+
+export const getTopRated = async (options: {
+	page: string
+	media: 'tv' | 'movie'
+	genres: string[]
+	region: string
+}) => {
+	const { media, page, genres, region } = options
+
+	let _genres = genres.length !== 0 ? `genres=${genres.join(',')}` : ''
+
+	if (page) _genres = `&${_genres}`
+	else _genres = `?${_genres}`
+
+	try {
+		const result = await API.get(
+			`/api/v1/media/top-rated/${media}${page}${_genres}&region=${region}`
+		)
+		return result.data
+	} catch (err) {
+		return { success: false }
+	}
+}
+
+export const getMostRated = async (options: {
+	page: string
+	media: 'tv' | 'movie'
+	genres: string[]
+}) => {
+	const { media, page, genres } = options
+
+	let _genres = genres.length !== 0 ? `genres=${genres.join(',')}` : ''
+
+	if (page) _genres = `&${_genres}`
+	else _genres = `?${_genres}`
+
+	try {
+		const result = await API.get(
+			`/api/v1/media/most-rated/${media}${page}${_genres}`
+		)
+		return result.data
+	} catch (err) {
+		return { success: false }
+	}
+}
+
+export const getUpcoming = async (options: {
+	page: string
+	media: 'tv' | 'movie'
+	genres: string[]
+	region: string
+}) => {
+	const { media, page, genres, region } = options
+
+	let _genres = genres.length !== 0 ? `genres=${genres.join(',')}` : ''
+
+	if (page) _genres = `&${_genres}`
+	else _genres = `?${_genres}`
+
+	try {
+		const result = await API.get(
+			`/api/v1/media/upcoming/${media}${page}${_genres}&region=${region}`
+		)
+		return result.data
+	} catch (err) {
+		return { success: false }
+	}
+}

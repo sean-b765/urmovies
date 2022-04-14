@@ -1,11 +1,7 @@
-import { AnimatePresence } from 'framer-motion'
 import { NextPage } from 'next'
-import React, { useState } from 'react'
-import MediaPreview from '../components/MediaPreview'
-import Thumb from '../components/Thumb'
+import React from 'react'
+import List from '../components/List'
 import { getDiscover } from '../store/actions/media'
-import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { setPreview } from '../store/slices/media'
 import { MovieResult } from '../types/movies'
 import { TVResult } from '../types/tv'
 
@@ -17,34 +13,9 @@ interface Props {
 }
 
 const Discover: NextPage<{ data: Props }> = ({ data }) => {
-	const dispatch = useAppDispatch()
-
-	const { preview } = useAppSelector((state) => state.media)
-
 	return (
 		<>
-			<div className="discover">
-				{!data?.success && <></>}
-				{data?.success && (
-					<>
-						<AnimatePresence exitBeforeEnter>
-							{preview.id && <MediaPreview />}
-						</AnimatePresence>
-						{data.result.map((media: any, key: number) => {
-							return (
-								<Thumb
-									key={key}
-									media={media}
-									className=""
-									onClick={() => {
-										dispatch(setPreview(media))
-									}}
-								/>
-							)
-						})}
-					</>
-				)}
-			</div>
+			{!data?.success ? <></> : <List data={{ result: data.result }} />}
 			<div className="pagination">
 				{data.page} of {data.pages}
 			</div>
