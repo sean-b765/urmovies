@@ -13,73 +13,80 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 const HorizontalScrollList = (props: React.PropsWithChildren<any>) => {
 	const containerRef = useRef<any>()
 	const [scrollAmount, setScrollAmount] = useState(0)
+	const [canScroll, setCanScroll] = useState(true)
+	const { loading } = useAppSelector((state) => state.misc)
 
 	useEffect(() => {
-		// console.log(scrollAmount)
-	}, [scrollAmount])
+		if (!loading) setScroll(0)
+	}, [loading])
 
 	function setScroll(amt: number) {
-		console.log(amt)
-
 		containerRef.current.scrollLeft = amt
+
+		if (containerRef.current.scrollWidth <= containerRef.current.clientWidth)
+			setCanScroll(false)
+
 		setScrollAmount(amt)
 	}
 
 	function scrollLeft() {}
 
-	const handleScroll = useCallback(
-		(change: 'left' | 'right') => {
-			const { scrollWidth, clientWidth } = containerRef.current
+	const handleScroll = (change: 'left' | 'right') => {
+		const { scrollWidth, clientWidth } = containerRef.current
 
-			// The padding which we should ignore when snapping to the start/end of the scroll box
-			const deadZonePadding = 30
+		// The padding which we should ignore when snapping to the start/end of the scroll box
+		const deadZonePadding = 30
 
-			const newAmount =
-				change === 'right'
-					? scrollAmount + clientWidth * 0.9
-					: scrollAmount - clientWidth * 0.9
+		const newAmount =
+			change === 'right'
+				? scrollAmount + clientWidth * 0.9
+				: scrollAmount - clientWidth * 0.9
 
-			if (change === 'left') {
-				if (
-					newAmount <= 0 + deadZonePadding &&
-					scrollAmount <= 0 + deadZonePadding
-				) {
-					setScroll(scrollWidth)
-				} else {
-					setScroll(newAmount)
-				}
+		if (change === 'left') {
+			if (
+				newAmount <= 0 + deadZonePadding &&
+				scrollAmount <= 0 + deadZonePadding
+			) {
+				setScroll(scrollWidth)
 			} else {
-				if (
-					newAmount >= scrollWidth - clientWidth - deadZonePadding &&
-					scrollAmount >= scrollWidth - clientWidth - deadZonePadding
-				) {
-					setScroll(0)
-				} else {
-					setScroll(newAmount)
-				}
+				setScroll(newAmount)
 			}
-		},
-		[scrollAmount]
-	)
+		} else {
+			if (
+				newAmount >= scrollWidth - clientWidth - deadZonePadding &&
+				scrollAmount >= scrollWidth - clientWidth - deadZonePadding
+			) {
+				setScroll(0)
+			} else {
+				setScroll(newAmount)
+			}
+		}
+	}
 
 	return (
 		<div className="scrollableList">
-			<button
-				className="btn btn--slideLeft"
-				onClick={() => {
-					handleScroll('left')
-				}}
-			>
-				<IoIosArrowBack />
-			</button>
-			<button
-				className="btn btn--slideRight"
-				onClick={() => {
-					handleScroll('right')
-				}}
-			>
-				<IoIosArrowForward />
-			</button>
+			{canScroll ? (
+				<>
+					<button
+						className="btn btn--slideLeft"
+						onClick={() => {
+							handleScroll('left')
+						}}
+					>
+						<IoIosArrowBack />
+					</button>
+					<button
+						className="btn btn--slideRight"
+						onClick={() => {
+							handleScroll('right')
+						}}
+					>
+						<IoIosArrowForward />
+					</button>
+				</>
+			) : (
+				<></>
+			)}
 			<div
 				className="list"
 				ref={containerRef}
