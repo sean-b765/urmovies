@@ -1,8 +1,7 @@
 import axios from 'axios'
 import emitter from './eventEmitter'
 
-// const API = axios.create({ baseURL: 'https://urmovies.herokuapp.com' })
-const API = axios.create({ baseURL: 'http://localhost:5000' })
+const API = axios.create({ baseURL: 'https://urmovies.herokuapp.com' })
 
 API.interceptors.request.use((req) => {
 	emitter.emit('AXIOS_START', null)
