@@ -47,8 +47,6 @@ export async function getServerSideProps(context: any) {
 		region,
 	})
 
-	console.log(movies)
-
 	if (!movies || !movies.success)
 		return {
 			props: {

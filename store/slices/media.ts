@@ -1,11 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Backdrop, Poster } from '../../types/common'
 import { MovieResult, SingleMovieResult } from '../../types/movies'
 import { SingleTVResult, TVResult } from '../../types/tv'
 
 export interface InitialDataState {
 	single: SingleMovieResult | SingleTVResult
 	preview: MovieResult | TVResult
+	fullscreenPic: Backdrop | Poster | null
 	showPreview: boolean
+	showFullscreenPic: boolean
 }
 
 const initialState: InitialDataState = {
@@ -32,6 +35,8 @@ const initialState: InitialDataState = {
 	},
 	preview: {},
 	showPreview: false,
+	fullscreenPic: null,
+	showFullscreenPic: false,
 }
 
 export const mediaSlice = createSlice({
@@ -54,9 +59,21 @@ export const mediaSlice = createSlice({
 		removePreview(state) {
 			state.showPreview = false
 		},
+		setFullscreenPic(state, action: PayloadAction<Backdrop | Poster | null>) {
+			state.fullscreenPic = action.payload
+		},
+		toggleFullscreenPic(state) {
+			state.showFullscreenPic = !state.showFullscreenPic
+		},
 	},
 })
 
-export const { setSingle, setPreview, removePreview } = mediaSlice.actions
+export const {
+	setSingle,
+	setPreview,
+	removePreview,
+	setFullscreenPic,
+	toggleFullscreenPic,
+} = mediaSlice.actions
 
 export default mediaSlice.reducer

@@ -27,6 +27,7 @@ const List: React.FC<{
 							key={key}
 							media={media}
 							className=""
+							type={data.type ? data.type : ''}
 							onClick={() => {
 								dispatch(
 									setPreview(data.type ? { ...media, type: data.type } : media)

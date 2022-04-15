@@ -13,11 +13,14 @@ import {
 import Image from 'next/image'
 import {
 	formatDate,
+	formatLargeNumbers,
 	formatPic,
 	formatPicThumbs,
 	formatRatingClassName,
 } from '../lib/format'
 import Link from 'next/link'
+import { BsFillPersonFill } from 'react-icons/bs'
+import { AiFillStar } from 'react-icons/ai'
 
 const MediaPreview = () => {
 	const { preview } = useAppSelector((state) => state.media)
@@ -51,9 +54,13 @@ const MediaPreview = () => {
 								<span
 									className={`${formatRatingClassName(preview.vote_average)}`}
 								>
+									<AiFillStar />
 									{Number(preview.vote_average).toFixed(1)}
 								</span>
-								<span>{preview.vote_count}</span>
+								<span>
+									<BsFillPersonFill />
+									{formatLargeNumbers(Number(preview.vote_count))}
+								</span>
 							</div>
 							<div className="genres">
 								{getGenreIds(preview)?.map((genre, idx) => {

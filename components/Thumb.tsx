@@ -12,8 +12,12 @@ const Thumb: React.FC<{
 	media: MovieResult | TVResult
 	className: string
 	onClick: Function
-}> = ({ media, className, onClick }) => {
+	type: string
+}> = ({ media, className, onClick, type }) => {
 	if (blacklisted.includes(String(media.id))) return <></>
+
+	const mediaType = type || getMediaType(media)
+
 	return (
 		<section
 			className={`thumb ${className}`}
@@ -23,7 +27,7 @@ const Thumb: React.FC<{
 				} catch (err) {}
 			}}
 		>
-			{getMediaType(media) === 'tv' ? <MdLiveTv /> : <MdLocalMovies />}
+			{mediaType === 'tv' ? <MdLiveTv /> : <MdLocalMovies />}
 			<div
 				className={`thumb__rating ${formatRatingClassName(media.vote_average)}`}
 			>
@@ -33,9 +37,7 @@ const Thumb: React.FC<{
 				<h2>
 					<Link
 						href={
-							getMediaType(media) === 'tv'
-								? `/tv/${media.id}`
-								: `/movies/${media.id}`
+							mediaType === 'tv' ? `/tv/${media.id}` : `/movies/${media.id}`
 						}
 					>
 						<a data-noclick>{getTitle(media)}</a>

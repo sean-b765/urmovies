@@ -64,7 +64,8 @@ export const getLanguageFromCode = (lang: string) => {
 
 export const getRuntime = (media: TVResult | MovieResult) => {
 	if ('runtime' in media) return Number(media.runtime)
-	if ('episode_run_time' in media) return Number(media.episode_run_time)
+	if ('episode_run_time' in media)
+		return Number((media.episode_run_time as number[])[0] || 0)
 	return 0
 }
 

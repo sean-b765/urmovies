@@ -64,8 +64,6 @@ export async function getServerSideProps(context: any) {
 
 	const success = movies.success && tv.success
 
-	console.log(tv.pages, movies.pages)
-
 	return {
 		props: {
 			data: {

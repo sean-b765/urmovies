@@ -20,11 +20,26 @@ const HorizontalScrollList = (props: React.PropsWithChildren<any>) => {
 		if (!loading) setScroll(0)
 	}, [loading])
 
-	function setScroll(amt: number) {
-		containerRef.current.scrollLeft = amt
+	// On resize, check if the container has overflow.
+	//  If there is we should show the scroll buttons
+	useEffect(() => {
+		window.addEventListener('resize', handleResize)
 
+		return () => window.removeEventListener('resize', handleResize)
+	}, [])
+
+	useEffect(() => {
+		if (containerRef.current) handleResize()
+	}, [containerRef.current])
+
+	function handleResize() {
 		if (containerRef.current.scrollWidth <= containerRef.current.clientWidth)
 			setCanScroll(false)
+		else setCanScroll(true)
+	}
+
+	function setScroll(amt: number) {
+		containerRef.current.scrollLeft = amt
 
 		setScrollAmount(amt)
 	}
@@ -64,7 +79,7 @@ const HorizontalScrollList = (props: React.PropsWithChildren<any>) => {
 	}
 
 	return (
-		<div className="scrollableList">
+		<div className={'scrollableList scrollableList' + props.className}>
 			{canScroll ? (
 				<>
 					<button

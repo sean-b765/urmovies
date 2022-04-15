@@ -21,7 +21,7 @@ export interface Providers {
 	[key: string]: CountryCode
 }
 
-interface Backdrop {
+export interface Backdrop {
 	aspect_ratio: number
 	height: number
 	iso_639_1: string
@@ -41,7 +41,7 @@ interface Logo {
 	width: number
 }
 
-interface Poster {
+export interface Poster {
 	aspect_ratio: number
 	height: number
 	iso_639_1: string

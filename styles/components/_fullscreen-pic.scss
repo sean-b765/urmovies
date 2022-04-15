@@ -1,0 +1,26 @@
+.fspic {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.47);
+
+  .btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 2rem;
+    svg {
+      fill: $light;
+    }
+  }
+
+  &__image {
+    position: relative;
+    width: 90%;
+    height: 90%;
+  }
+}

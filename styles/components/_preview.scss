@@ -64,8 +64,17 @@
           }
 
           .votes {
+            display: flex;
+            
             span {
               margin-inline: .5rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+              svg {
+                margin-right: .4rem;
+              }
             }
           }
           .genres {

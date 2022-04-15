@@ -3,6 +3,10 @@
   width: 100%;
 
   $size: clamp(40px, 6vw, 50px);
+
+  &--vertical-centering {
+    .list {align-items: center;}
+  }
   
   .list {
     display: grid;

@@ -1,0 +1,57 @@
+.review {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 250px;
+
+
+  &__author {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: .5rem;
+
+    &__profile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+
+      p {
+        margin-left: .5rem;
+      }
+    }
+    &__rating {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      > svg {
+        margin-right: .4rem;
+      }
+    }
+  }
+
+  &__body {
+    position: relative;
+    width: 100%;
+    padding-left: .7rem;
+    height: 100px;
+    text-align: start;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: .9rem;
+
+    *::selection {
+      background: transparent;
+    }
+
+    > * {
+      position: relative;
+      max-width: 100%;
+    }
+  }
+}

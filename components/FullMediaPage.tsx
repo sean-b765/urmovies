@@ -1,7 +1,8 @@
 import Image from 'next/image'
-import React, { useEffect, useLayoutEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import {
 	formatLargeNumbers,
+	formatPic,
 	formatPicOriginal,
 	formatPicThumbs,
 	formatRatingClassName,
@@ -10,7 +11,6 @@ import {
 	getBudget,
 	getDate,
 	getGenreIds,
-	getGenreName,
 	getLanguageFromCode,
 	getMediaType,
 	getProviders,
@@ -20,18 +20,20 @@ import {
 } from '../lib/util'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import Thumb from './Thumb'
-import { marked } from 'marked'
 import { AnimatePresence } from 'framer-motion'
 import MediaPreview from './MediaPreview'
-import { setPreview } from '../store/slices/media'
+import { setPreview, toggleFullscreenPic } from '../store/slices/media'
 import Link from 'next/link'
 import { Genre } from '../types/common'
-import { AiFillStar } from 'react-icons/ai'
+import { AiFillStar, AiOutlineClose } from 'react-icons/ai'
 import { BsFillPersonFill, BsCalendarDate } from 'react-icons/bs'
 import { BiTime } from 'react-icons/bi'
 import { IoLanguageSharp } from 'react-icons/io5'
 
 import HorizontalScrollList from './HorizontalScrollList'
+import Review from './Review'
+import ImageThumb from './ImageThumb'
+import { motion } from 'framer-motion'
 
 const FullMediaPage = () => {
 	const { country_code: countryCode, loading } = useAppSelector(
@@ -44,22 +46,11 @@ const FullMediaPage = () => {
 	const { result, recommendations, providers, images, reviews, cast } =
 		useAppSelector((state) => state.media.single)
 
-	console.log(result)
+	const { fullscreenPic, showFullscreenPic } = useAppSelector(
+		(state) => state.media
+	)
 
 	const watchProviders = getProviders(providers[countryCode])
-
-	const renderer = new marked.Renderer()
-	renderer.link = function (href, title, text) {
-		return `<a>${text}</a>`
-	}
-	renderer.code = function (code, lang, isEscaped) {
-		return code
-	}
-	// Since marked will parse <html tags>, we need to exclude these! This allows for <script> tags to be parsed
-	//  This is different from setting sanitize: true in options, as this will remove the wrapping <tag> but keep the inner text
-	renderer.html = function (html) {
-		return ''
-	}
 
 	useEffect(() => {
 		if (!recommendationsRef?.current) return
@@ -69,6 +60,33 @@ const FullMediaPage = () => {
 	return (
 		<div className="media">
 			<AnimatePresence>{showPreview && <MediaPreview />}</AnimatePresence>
+			<AnimatePresence>
+				{showFullscreenPic && (
+					<motion.div
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 0.48 }}
+						className="fspic"
+					>
+						<button
+							onClick={(e: any) => {
+								dispatch(toggleFullscreenPic())
+							}}
+							className="btn btn--close"
+						>
+							<AiOutlineClose />
+						</button>
+						<div className="fspic__image">
+							<Image
+								src={formatPicOriginal(fullscreenPic?.file_path as string)}
+								layout="fill"
+								objectFit="contain"
+							/>
+						</div>
+					</motion.div>
+				)}
+			</AnimatePresence>
 
 			<header className="media__info">
 				<div className="media__info__backdrop">
@@ -190,23 +208,7 @@ const FullMediaPage = () => {
 			{reviews.length ? (
 				<section className="media__reviews">
 					{reviews.map((review, idx) => {
-						return (
-							<div className="review" key={idx}>
-								<header>
-									<p>{review.author_details.rating}</p>
-									<p>{review.author}</p>
-								</header>
-								<div
-									className="review__body"
-									key={idx}
-									dangerouslySetInnerHTML={{
-										__html: marked.parse(review.content, {
-											renderer,
-										}),
-									}}
-								></div>
-							</div>
-						)
+						return <Review review={review} key={idx} />
 					})}
 				</section>
 			) : (
@@ -270,32 +272,14 @@ const FullMediaPage = () => {
 			{images.backdrops.length || images.posters.length ? (
 				<section className="media__gallery">
 					<div className="gallery">
-						{images.backdrops.slice(0, 5).map((image, idx) => {
-							return (
-								<div key={idx} className="gallery__image">
-									<Image
-										src={formatPicOriginal(image.file_path)}
-										// layout="fill"
-										height={image.height}
-										width={image.width}
-										objectFit="cover"
-									></Image>
-								</div>
-							)
-						})}
-						{images.posters.slice(0, 5).map((image, idx) => {
-							return (
-								<div key={idx} className="gallery__image">
-									<Image
-										src={formatPicOriginal(image.file_path)}
-										// layout="fill"
-										height={image.height}
-										width={image.width}
-										objectFit="cover"
-									></Image>
-								</div>
-							)
-						})}
+						<HorizontalScrollList className="--vertical-centering">
+							{images.backdrops.slice(0, 5).map((image, idx) => {
+								return <ImageThumb image={image} key={idx} />
+							})}
+							{images.posters.slice(0, 5).map((image, idx) => {
+								return <ImageThumb image={image} key={idx} />
+							})}
+						</HorizontalScrollList>
 					</div>
 				</section>
 			) : (
@@ -314,6 +298,7 @@ const FullMediaPage = () => {
 											dispatch(setPreview(recommended))
 										}}
 										key={idx}
+										type={getMediaType(recommended)}
 									/>
 								)
 							})}
