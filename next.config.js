@@ -2,7 +2,12 @@
 const nextConfig = {
 	reactStrictMode: true,
 	images: {
-		domains: ['tmdb.org', 'themoviedb.org', 'image.tmdb.org'],
+		domains: [
+			'tmdb.org',
+			'themoviedb.org',
+			'image.tmdb.org',
+			'www.gravatar.com',
+		],
 	},
 }
 
