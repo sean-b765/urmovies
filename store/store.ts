@@ -1,12 +1,14 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import misc from './slices/misc'
 import media from './slices/media'
+import auth from './slices/auth'
 
 export function makeStore() {
 	return configureStore({
 		reducer: {
 			misc,
 			media,
+			auth,
 		},
 	})
 }
