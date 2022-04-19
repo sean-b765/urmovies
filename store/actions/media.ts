@@ -37,6 +37,20 @@ export const getMedia = async (options: {
 	}
 }
 
+export const getMediaPreview = async (options: {
+	mediaId: string
+	media: 'tv' | 'movie'
+}) => {
+	const { media, mediaId } = options
+
+	try {
+		const result = await API.get(`/api/v1/media/min/${media}/${mediaId}`)
+		return result.data
+	} catch (err) {
+		return { success: false }
+	}
+}
+
 export const getRecommendations = async (options: {
 	mediaId: string
 	media: 'tv' | 'movie'
@@ -159,6 +173,30 @@ export const getUpcoming = async (options: {
 		const result = await API.get(
 			`/api/v1/media/upcoming/${media}${page}${_genres}&region=${region}`
 		)
+		return result.data
+	} catch (err) {
+		return { success: false }
+	}
+}
+
+export const setRating = async (
+	media: string,
+	mediaId: string,
+	rating: number
+) => {
+	try {
+		const result = await API.post(`/api/v1/media/${mediaId}/rate/${media}`, {
+			rating,
+		})
+		return result.data
+	} catch (err) {
+		return { success: false }
+	}
+}
+
+export const getRatings = async (media: string, mediaId: string) => {
+	try {
+		const result = await API.get(`/api/v1/media/${mediaId}/ratings/${media}`)
 		return result.data
 	} catch (err) {
 		return { success: false }

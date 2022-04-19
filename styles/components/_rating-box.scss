@@ -1,0 +1,33 @@
+.rate-movie {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $blue;
+  padding: .5rem 1rem;
+  border-radius: 8px;
+  transform: translateY(150%);
+
+  > .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .3rem .2rem;
+
+    svg {
+      transition: all 0.3s ease-in-out;
+    }
+
+    &--rate-hover {
+      svg {
+        fill: rgb(158, 146, 78);
+      }
+    }
+
+    &--rate-rated {
+      svg {
+        fill: rgb(223, 193, 23);
+      }
+    }
+  }
+}

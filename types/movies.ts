@@ -63,4 +63,8 @@ export interface SingleMovieResult {
 		result: MovieResult[]
 		success: boolean
 	}
+	ratings?: Array<{
+		user: string
+		rating: number
+	}>
 }

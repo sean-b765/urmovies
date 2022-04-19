@@ -3,18 +3,42 @@
   min-height: 5rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   position: fixed;
   background: transparent;
   width: 100vw;
+  padding-inline: 3rem;
   transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
 
   &--scrolled {
     background: $dark;
   }
 
+  &__login {
+    svg {
+      font-size: 1.7rem;
+    }
+  }
+
+  &__profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .profile-link {
+      > span {
+        border-radius: 50%;
+        overflow: hidden;
+        cursor: pointer;
+      }
+    }
+  }
+
   nav {
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 
     > ul {
       display: flex;

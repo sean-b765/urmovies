@@ -5,7 +5,13 @@ import { SingleTVResult, TVResult } from '../../types/tv'
 
 export interface InitialDataState {
 	single: SingleMovieResult | SingleTVResult
-	preview: MovieResult | TVResult
+	preview: {
+		result: MovieResult | TVResult
+		ratings?: Array<{
+			user: string
+			rating: number
+		}>
+	}
 	fullscreenPic: Backdrop | Poster | null
 	showPreview: boolean
 	showFullscreenPic: boolean
@@ -32,8 +38,11 @@ const initialState: InitialDataState = {
 			crew: [],
 			id: 0,
 		},
+		ratings: [],
 	},
-	preview: {},
+	preview: {
+		result: {},
+	},
 	showPreview: false,
 	fullscreenPic: null,
 	showFullscreenPic: false,
@@ -50,7 +59,7 @@ export const mediaSlice = createSlice({
 			state.single = action.payload
 		},
 		setPreview(state, action: PayloadAction<MovieResult | TVResult>) {
-			state.preview = action.payload
+			state.preview.result = action.payload
 			state.showPreview = true
 		},
 		togglePreview(state) {
@@ -65,6 +74,12 @@ export const mediaSlice = createSlice({
 		toggleFullscreenPic(state) {
 			state.showFullscreenPic = !state.showFullscreenPic
 		},
+		setRatings(state, action: PayloadAction<any>) {
+			state.single.ratings = action.payload
+		},
+		pushRatings(state, action: PayloadAction<any>) {
+			state.single.ratings?.push(action.payload)
+		},
 	},
 })
 
@@ -74,6 +89,8 @@ export const {
 	removePreview,
 	setFullscreenPic,
 	toggleFullscreenPic,
+	setRatings,
+	pushRatings,
 } = mediaSlice.actions
 
 export default mediaSlice.reducer

@@ -4,7 +4,16 @@ import emitter from './eventEmitter'
 const API = axios.create({ baseURL: 'https://urmovies.herokuapp.com' })
 
 API.interceptors.request.use((req) => {
-	emitter.emit('AXIOS_START', null)
+	try {
+		// localStorage will be undefined for server-side requests
+		// However if it isn't, we have access to the JWT and we will need to set the Authorization header
+		if (localStorage) {
+			const token = localStorage.getItem('authtoken') || ''
+			if (token) {
+				req.headers = { ...req.headers, Authorization: token }
+			}
+		}
+	} catch (err) {}
 	return req
 })
 

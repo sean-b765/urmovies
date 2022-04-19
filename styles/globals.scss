@@ -11,6 +11,12 @@ body {
   color: $light;
 }
 
+main {
+  > div:not(.media) {
+    padding-top: 6rem;
+  }
+}
+
 .green {
   color: rgb(23, 234, 23);
   font-family: 'Roboto Mono';

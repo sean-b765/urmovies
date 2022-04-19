@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { removePreview } from '../store/slices/media'
 import {
 	getDate,
@@ -12,7 +12,6 @@ import {
 } from '../lib/util'
 import Image from 'next/image'
 import {
-	formatDate,
 	formatLargeNumbers,
 	formatPic,
 	formatPicThumbs,
@@ -23,7 +22,7 @@ import { BsFillPersonFill } from 'react-icons/bs'
 import { AiFillStar } from 'react-icons/ai'
 
 const MediaPreview = () => {
-	const { preview } = useAppSelector((state) => state.media)
+	const { result } = useAppSelector((state) => state.media.preview)
 	const dispatch = useAppDispatch()
 
 	return (
@@ -42,8 +41,8 @@ const MediaPreview = () => {
 			<div className="mediapreview">
 				<div className="card">
 					<Link
-						href={`/${getMediaType(preview) === 'movie' ? 'movies' : 'tv'}/${
-							preview.id
+						href={`/${getMediaType(result) === 'movie' ? 'movies' : 'tv'}/${
+							result.id
 						}`}
 					>
 						<a className="btn btn--viewmore">View More</a>
@@ -51,53 +50,49 @@ const MediaPreview = () => {
 					<header className="card__info">
 						<div className="top">
 							<div className="votes">
-								<span
-									className={`${formatRatingClassName(preview.vote_average)}`}
-								>
+								<p className={`${formatRatingClassName(result.vote_average)}`}>
 									<AiFillStar />
-									{Number(preview.vote_average).toFixed(1)}
-								</span>
+									{Number(result.vote_average).toFixed(1)}
+								</p>
 								<span>
 									<BsFillPersonFill />
-									{formatLargeNumbers(Number(preview.vote_count))}
+									{formatLargeNumbers(Number(result.vote_count))}
 								</span>
 							</div>
 							<div className="genres">
-								{getGenreIds(preview)?.map((genre, idx) => {
+								{getGenreIds(result)?.map((genre, idx) => {
 									return (
 										<Link href={`/?genres=${genre}`} key={idx}>
-											<a>
-												{getGenreName(String(genre), getMediaType(preview))}
-											</a>
+											<a>{getGenreName(String(genre), getMediaType(result))}</a>
 										</Link>
 									)
 								})}
 							</div>
 							<p>
-								{getDate(preview)} |{' '}
-								{getLanguageFromCode(preview.original_language as string)}
+								{getDate(result)} |{' '}
+								{getLanguageFromCode(result.original_language as string)}
 							</p>
 						</div>
 						<div className="bottom">
 							<h2>
 								<Link
 									href={`/${
-										getMediaType(preview) === 'movie' ? 'movies' : 'tv'
-									}/${preview.id}`}
+										getMediaType(result) === 'movie' ? 'movies' : 'tv'
+									}/${result.id}`}
 								>
-									<a>{getTitle(preview)}</a>
+									<a>{getTitle(result)}</a>
 								</Link>
 							</h2>
 							<p>
-								{preview.overview?.substring(0, 250).trim()}
-								{Number(preview.overview?.length) > 250 ? '...' : ''}
+								{result.overview?.substring(0, 250).trim()}
+								{Number(result.overview?.length) > 250 ? '...' : ''}
 							</p>
 						</div>
 					</header>
 					<div className="card__image">
-						{preview.backdrop_path && (
+						{result.backdrop_path && (
 							<Image
-								src={formatPic(preview.backdrop_path as string)}
+								src={formatPic(result.backdrop_path as string)}
 								layout="fill"
 								objectFit="cover"
 								priority={true}
@@ -106,9 +101,9 @@ const MediaPreview = () => {
 					</div>
 				</div>
 				<div className="mediapreview__thumb">
-					{preview.poster_path && (
+					{result.poster_path && (
 						<Image
-							src={formatPicThumbs(preview.poster_path as string)}
+							src={formatPicThumbs(result.poster_path as string)}
 							layout="fill"
 							objectFit="cover"
 						/>

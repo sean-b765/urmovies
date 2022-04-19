@@ -8,7 +8,7 @@ import { SingleTVResult } from '../../types/tv'
 
 const TVPage: NextPage<{ data: SingleTVResult }> = ({ data }) => {
 	const dispatch = useAppDispatch()
-	dispatch(setSingle(data))
+	dispatch(setSingle({ ...data, result: { ...data.result, media_type: 'tv' } }))
 
 	return <FullMediaPage />
 }

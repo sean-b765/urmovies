@@ -9,7 +9,9 @@ import { SingleMovieResult } from '../../types/movies'
 const MoviePage: NextPage<{ data: SingleMovieResult }> = ({ data }) => {
 	const dispatch = useAppDispatch()
 
-	dispatch(setSingle(data))
+	dispatch(
+		setSingle({ ...data, result: { ...data.result, media_type: 'movie' } })
+	)
 
 	return (
 		<>

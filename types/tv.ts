@@ -121,4 +121,8 @@ export interface SingleTVResult {
 		result: TVResult[]
 		success: boolean
 	}
+	ratings?: Array<{
+		user: string
+		rating: number
+	}>
 }

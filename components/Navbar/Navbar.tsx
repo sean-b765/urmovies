@@ -1,9 +1,13 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import { AiOutlineLogin } from 'react-icons/ai'
+import { useAppSelector } from '../../store/hooks'
 import Dropdown from './Dropdown'
 
 const Navbar = () => {
 	const [scrolled, setScrolled] = useState(false)
+	const { profile, token } = useAppSelector((state) => state.auth)
 
 	const handleScroll = () => {
 		if (window.scrollY > 100) setScrolled(true)
@@ -16,6 +20,7 @@ const Navbar = () => {
 			window.removeEventListener('scroll', handleScroll)
 		}
 	}, [])
+
 	return (
 		<header className={scrolled ? 'navbar navbar--scrolled' : 'navbar'}>
 			<nav>
@@ -76,6 +81,31 @@ const Navbar = () => {
 					</li>
 				</ul>
 			</nav>
+
+			{profile && token ? (
+				<div className="navbar__profile">
+					<Link href={`/users/${profile.username}`}>
+						<a className="profile-link">
+							<Image
+								src={profile.avatar ? profile.avatar : '/default-avatar.jpg'}
+								objectFit="cover"
+								width={42}
+								height={42}
+							/>
+						</a>
+					</Link>
+				</div>
+			) : (
+				<>
+					<div className="navbar__login">
+						<Link href="/login">
+							<a>
+								<AiOutlineLogin />
+							</a>
+						</Link>
+					</div>
+				</>
+			)}
 		</header>
 	)
 }

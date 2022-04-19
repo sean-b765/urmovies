@@ -58,6 +58,15 @@ export interface Images {
 	posters: Poster[]
 }
 
+export interface Rating {
+	api_id: string
+	media_type: 'movie' | 'tv'
+	created_at: string
+	updated_at: string
+	rating: number
+	user: string
+}
+
 export interface Cast {
 	adult?: boolean
 	gender?: number | null

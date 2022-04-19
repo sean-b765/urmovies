@@ -3,6 +3,7 @@ import { useRouter, Router } from 'next/router'
 import React, { useEffect } from 'react'
 import { getGeolocationThunk } from '../store/actions/geoloc'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { setProfile, setToken } from '../store/slices/auth'
 import { removePreview } from '../store/slices/media'
 import { setLoading } from '../store/slices/misc'
 import Navbar from './Navbar/Navbar'
@@ -29,6 +30,12 @@ const Layout: React.FC<{ children: any }> = ({ children }) => {
 
 	useEffect(() => {
 		dispatch(removePreview())
+		dispatch(setToken(localStorage.getItem('authtoken') || ''))
+		dispatch(
+			setProfile(
+				JSON.parse(localStorage.getItem('userprofile') || '{}') || null
+			)
+		)
 	}, [router])
 
 	function randomAnimation(min: number, max: number) {

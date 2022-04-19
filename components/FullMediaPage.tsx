@@ -1,11 +1,9 @@
 import Image from 'next/image'
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import {
 	formatLargeNumbers,
-	formatPic,
 	formatPicOriginal,
 	formatPicThumbs,
-	formatRatingClassName,
 } from '../lib/format'
 import {
 	getBudget,
@@ -25,8 +23,8 @@ import MediaPreview from './MediaPreview'
 import { setPreview, toggleFullscreenPic } from '../store/slices/media'
 import Link from 'next/link'
 import { Genre } from '../types/common'
-import { AiFillStar, AiOutlineClose } from 'react-icons/ai'
-import { BsFillPersonFill, BsCalendarDate } from 'react-icons/bs'
+import { AiOutlineClose } from 'react-icons/ai'
+import { BsCalendarDate } from 'react-icons/bs'
 import { BiTime } from 'react-icons/bi'
 import { IoLanguageSharp } from 'react-icons/io5'
 
@@ -34,6 +32,7 @@ import HorizontalScrollList from './HorizontalScrollList'
 import Review from './Review'
 import ImageThumb from './ImageThumb'
 import { motion } from 'framer-motion'
+import Ratings from './Rating/Ratings'
 
 const FullMediaPage = () => {
 	const { country_code: countryCode, loading } = useAppSelector(
@@ -41,7 +40,6 @@ const FullMediaPage = () => {
 	)
 	const { preview, showPreview } = useAppSelector((state) => state.media)
 	const dispatch = useAppDispatch()
-	const recommendationsRef = useRef<any>()
 
 	const { result, recommendations, providers, images, reviews, cast } =
 		useAppSelector((state) => state.media.single)
@@ -51,11 +49,6 @@ const FullMediaPage = () => {
 	)
 
 	const watchProviders = getProviders(providers[countryCode])
-
-	useEffect(() => {
-		if (!recommendationsRef?.current) return
-		if (!loading) recommendationsRef.current.scrollLeft = 0
-	}, [loading])
 
 	return (
 		<div className="media">
@@ -102,20 +95,8 @@ const FullMediaPage = () => {
 					<h1>{getTitle(result)}</h1>
 				</div>
 
-				<div className="media__info__votes">
-					<p
-						className={`media__info__votes__average ${formatRatingClassName(
-							result.vote_average
-						)}`}
-					>
-						<AiFillStar />
-						{result.vote_average}
-					</p>
-					<p className="media__info__votes__count">
-						<BsFillPersonFill />
-						{formatLargeNumbers(Number(result.vote_count))}
-					</p>
-				</div>
+				<Ratings className={`media__info__votes`} />
+
 				<p className="media__info__overview">{result.overview}</p>
 
 				<div className="media__info__genres">
@@ -286,7 +267,7 @@ const FullMediaPage = () => {
 				<></>
 			)}
 			{recommendations?.result.length ? (
-				<section className="media__recommended" ref={recommendationsRef}>
+				<section className="media__recommended">
 					<div className="media__recommended__wrapper">
 						<HorizontalScrollList>
 							{recommendations?.result.map((recommended, idx) => {

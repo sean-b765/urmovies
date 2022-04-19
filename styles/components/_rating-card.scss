@@ -1,0 +1,51 @@
+.ratingcard {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: clamp(200px, 70vw, 400px);
+  padding: 2rem 1rem;
+  margin: .5rem;
+
+  &__backdrop {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    inset: 0;
+
+    &::after {
+      position: absolute;
+      inset: 0;
+      content: '';
+      background: rgb(0,0,0);
+      background: linear-gradient(90deg, rgba(0,0,0,0.4962359943977591) 0%, rgba(0,0,0,1) 100%);
+    }
+  }
+
+  &__title {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    .time {
+      font-family: 'Roboto Mono';
+      font-size: .8rem;
+      margin-bottom: .5rem;
+    }
+    .title {
+      font-size: .9rem;
+
+    }
+  }
+  &__rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 1rem;
+    svg {
+      margin-right: .4rem;
+    }
+  }
+}
