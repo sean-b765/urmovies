@@ -1,4 +1,3 @@
-import { createAsyncThunk } from '@reduxjs/toolkit'
 import API from '../../services/api'
 
 export const getDiscover = async (options: {
@@ -69,9 +68,8 @@ export const getPopular = async (options: {
 	page: string
 	media: 'tv' | 'movie'
 	genres: string[]
-	region: string
 }) => {
-	const { media, page, genres, region } = options
+	const { media, page, genres } = options
 
 	let _genres = genres.length !== 0 ? `genres=${genres.join(',')}` : ''
 
@@ -80,7 +78,7 @@ export const getPopular = async (options: {
 
 	try {
 		const result = await API.get(
-			`/api/v1/media/popular/${media}${page}${_genres}&region=${region}`
+			`/api/v1/media/popular/${media}${page}${_genres}`
 		)
 		return result.data
 	} catch (err) {
@@ -92,9 +90,8 @@ export const getPlaying = async (options: {
 	page: string
 	media: 'tv' | 'movie'
 	genres: string[]
-	region: string
 }) => {
-	const { media, page, genres, region } = options
+	const { media, page, genres } = options
 
 	let _genres = genres.length !== 0 ? `genres=${genres.join(',')}` : ''
 
@@ -103,7 +100,7 @@ export const getPlaying = async (options: {
 
 	try {
 		const result = await API.get(
-			`/api/v1/media/now-playing/${media}${page}${_genres}&region=${region}`
+			`/api/v1/media/now-playing/${media}${page}${_genres}`
 		)
 		return result.data
 	} catch (err) {
@@ -115,9 +112,8 @@ export const getTopRated = async (options: {
 	page: string
 	media: 'tv' | 'movie'
 	genres: string[]
-	region: string
 }) => {
-	const { media, page, genres, region } = options
+	const { media, page, genres } = options
 
 	let _genres = genres.length !== 0 ? `genres=${genres.join(',')}` : ''
 
@@ -126,7 +122,7 @@ export const getTopRated = async (options: {
 
 	try {
 		const result = await API.get(
-			`/api/v1/media/top-rated/${media}${page}${_genres}&region=${region}`
+			`/api/v1/media/top-rated/${media}${page}${_genres}`
 		)
 		return result.data
 	} catch (err) {
@@ -160,9 +156,8 @@ export const getUpcoming = async (options: {
 	page: string
 	media: 'tv' | 'movie'
 	genres: string[]
-	region: string
 }) => {
-	const { media, page, genres, region } = options
+	const { media, page, genres } = options
 
 	let _genres = genres.length !== 0 ? `genres=${genres.join(',')}` : ''
 
@@ -171,7 +166,7 @@ export const getUpcoming = async (options: {
 
 	try {
 		const result = await API.get(
-			`/api/v1/media/upcoming/${media}${page}${_genres}&region=${region}`
+			`/api/v1/media/upcoming/${media}${page}${_genres}`
 		)
 		return result.data
 	} catch (err) {

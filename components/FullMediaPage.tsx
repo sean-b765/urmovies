@@ -166,7 +166,9 @@ const FullMediaPage = () => {
 													></Image>
 												</div>
 												<div className="cast__info">
-													<p className="name">{person.name}</p>
+													<Link href={`/people/${person.id}`}>
+														<a className="name">{person.name}</a>
+													</Link>
 													{person.character && (
 														<p className="character">as {person.character}</p>
 													)}

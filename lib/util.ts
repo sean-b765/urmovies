@@ -1,9 +1,13 @@
-import { CountryCode, Provider } from '../types/common'
+import {
+	CastObjectMovie,
+	CastObjectTV,
+	CountryCode,
+	Provider,
+} from '../types/common'
 import { MovieResult } from '../types/movies'
 import { TVResult } from '../types/tv'
 import { formatDate } from './format'
 import { movieGenres, tvGenres } from '../lib/genres'
-import media from '../store/slices/media'
 import { langCodes } from './languages'
 
 export const getTitle = (media: TVResult | MovieResult) => {
@@ -20,6 +24,11 @@ export const getDate = (media: TVResult | MovieResult) => {
 	}
 
 	return date
+}
+
+export const getEpisodeCount = (media: CastObjectTV) => {
+	if ('episode_count' in media)
+		return media.episode_count ? media.episode_count : ''
 }
 
 export const getMediaType = (media: TVResult | MovieResult): string => {

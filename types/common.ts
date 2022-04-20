@@ -1,3 +1,6 @@
+import { MovieResult } from './movies'
+import { TVResult } from './tv'
+
 export interface Genre {
 	id: number
 	name: string
@@ -80,6 +83,42 @@ export interface Cast {
 	character?: string
 	credit_id?: string
 	order?: number
+}
+
+export interface CastObjectMovie extends MovieResult {
+	character?: string
+}
+export interface CastObjectTV extends TVResult {
+	character?: string
+	episode_count?: number
+}
+
+export interface CrewObjectBase extends MovieResult {
+	job?: string
+	department?: string
+}
+
+export interface Person {
+	credits: {
+		cast?: Array<CastObjectMovie | CastObjectTV>
+		crew?: Array<CrewObjectBase>
+	}
+	result: {
+		adult?: boolean
+		also_known_as?: string[]
+		biography?: string
+		deathday?: string | null
+		birthday?: string
+		gender?: number
+		homepage?: string
+		id?: number
+		imdb_id?: string
+		known_for_department?: string
+		name?: string
+		place_of_birth?: string
+		popularity?: number
+		profile_path?: string
+	}
 }
 
 export interface TMDBReview {

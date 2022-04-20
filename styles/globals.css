@@ -1144,6 +1144,132 @@
   width: 100%;
 }
 
+.biography {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 4rem;
+}
+
+.biography__roles, .biography__crew {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+}
+
+.biography__roles h2, .biography__crew h2 {
+  margin-bottom: 1rem;
+}
+
+.biography__roles .list, .biography__crew .list {
+  -ms-grid-columns: (minmax(220px, 1fr))[auto-fill] !important;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+  grid-auto-columns: minmax(220px, 1fr) !important;
+}
+
+.biography__roles .role, .biography__crew .role {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 2rem 1rem;
+}
+
+.biography__roles .role h3, .biography__crew .role h3 {
+  font-size: 1.1rem;
+}
+
+.biography__roles .role > *, .biography__crew .role > * {
+  text-align: center;
+  margin: .5rem 0;
+}
+
+.biography__roles .role__image, .biography__crew .role__image {
+  margin: 0 !important;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  z-index: -1;
+}
+
+.biography__roles .role__image::after, .biography__crew .role__image::after {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  content: '';
+  background: rgba(0, 0, 0, 0.591);
+}
+
+.biography__profile {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  max-width: 1000px;
+}
+
+.biography__profile p {
+  text-align: center;
+  margin-bottom: .3rem;
+}
+
+.biography__profile h1 {
+  margin-bottom: .76rem;
+}
+
+.biography__profile .bio {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.biography__profile__image {
+  border-radius: 50%;
+}
+
 body {
   background: #00171f;
   color: #efebeb;

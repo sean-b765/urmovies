@@ -7,9 +7,15 @@ import { TVResult } from '../types/tv'
 import { formatPicThumbs, formatRatingClassName } from '../lib/format'
 import { getMediaType, getTitle } from '../lib/util'
 import { blacklisted } from '../lib/blacklisted'
+import { CastObjectMovie, CastObjectTV, CrewObjectBase } from '../types/common'
 
 const Thumb: React.FC<{
-	media: MovieResult | TVResult
+	media:
+		| MovieResult
+		| TVResult
+		| CastObjectMovie
+		| CastObjectTV
+		| CrewObjectBase
 	className: string
 	onClick: Function
 	type: string
@@ -43,6 +49,10 @@ const Thumb: React.FC<{
 						<a data-noclick>{getTitle(media)}</a>
 					</Link>
 				</h2>
+				{'character' in media && media?.character && (
+					<p>as {media?.character}</p>
+				)}
+				{'job' in media && <p>{media?.job}</p>}
 			</header>
 			<div className="thumb__image">
 				<Image
