@@ -32,20 +32,10 @@ export async function getServerSideProps(context: any) {
 	const page = context.query.page
 	const genres = context?.query?.genres?.split(',') || []
 
-	const data = (
-		await axios.get('https://urmovies.herokuapp.com/api/v1/misc/geoip')
-	).data
-
-	const region =
-		data?.success && data?.result?.country_code
-			? data?.result?.country_code
-			: 'us'
-
 	const movies = await getTopRated({
 		page: page ? `?page=${page}` : '',
 		media: 'movie',
 		genres,
-		region,
 	})
 
 	if (!movies || !movies.success)
