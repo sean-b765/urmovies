@@ -28,6 +28,7 @@ const CommentSection: React.FC<{ commentSectionId: string }> = ({
 					{comments.map((comment, idx) => {
 						return (
 							<Thread
+								key={idx}
 								comment={comment}
 								replies={replies.filter(
 									(potentialReply) => potentialReply.parent_id === comment._id
