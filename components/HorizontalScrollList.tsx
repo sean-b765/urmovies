@@ -1,12 +1,4 @@
-import Image from 'next/image'
-import React, {
-	ReactChildren,
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-} from 'react'
-import { formatPicThumbs } from '../lib/format'
+import React, { useEffect, useRef, useState } from 'react'
 import { useAppSelector } from '../store/hooks'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 
@@ -43,8 +35,6 @@ const HorizontalScrollList = (props: React.PropsWithChildren<any>) => {
 
 		setScrollAmount(amt)
 	}
-
-	function scrollLeft() {}
 
 	const handleScroll = (change: 'left' | 'right') => {
 		const { scrollWidth, clientWidth } = containerRef.current

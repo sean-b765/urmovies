@@ -143,9 +143,12 @@ export async function getServerSideProps(context: any) {
 	const { id } = context.params
 	const person = await getPerson(id)
 
+	console.log(`people${id}`)
+
 	return {
 		props: {
 			person,
+			commentSectionId: `people${id}`,
 		},
 	}
 }

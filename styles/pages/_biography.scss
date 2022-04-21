@@ -66,6 +66,7 @@
     justify-content: center;
     flex-direction: column;
     max-width: 1000px;
+    margin: 0 2rem;
 
     p {
       text-align: center;
@@ -79,6 +80,7 @@
     .bio {
       margin-top: 2rem;
       text-align: center;
+      font-size: .9rem;
     }
 
     &__image {

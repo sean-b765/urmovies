@@ -26,9 +26,14 @@
     justify-content: center;
 
     .profile-link {
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid $blue;
+
       > span {
-        border-radius: 50%;
-        overflow: hidden;
         cursor: pointer;
       }
     }

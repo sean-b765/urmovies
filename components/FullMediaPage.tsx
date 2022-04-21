@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
 	formatLargeNumbers,
 	formatPicOriginal,
@@ -22,7 +22,7 @@ import { AnimatePresence } from 'framer-motion'
 import MediaPreview from './MediaPreview'
 import { setPreview, toggleFullscreenPic } from '../store/slices/media'
 import Link from 'next/link'
-import { Genre } from '../types/common'
+import { Comment, Genre, Reply } from '../types/common'
 import { AiOutlineClose } from 'react-icons/ai'
 import { BsCalendarDate } from 'react-icons/bs'
 import { BiTime } from 'react-icons/bi'
@@ -154,32 +154,26 @@ const FullMediaPage = () => {
 					<section className="media__cast">
 						<HorizontalScrollList>
 							{cast.cast.map((person, idx) => {
-								return person.profile_path ? (
-									<div className="cast" key={idx}>
-										{person.profile_path ? (
-											<>
-												<div className="cast__image">
-													<Image
-														src={formatPicThumbs(person.profile_path as string)}
-														layout="fill"
-														objectFit="cover"
-													></Image>
-												</div>
-												<div className="cast__info">
-													<Link href={`/people/${person.id}`}>
-														<a className="name">{person.name}</a>
-													</Link>
-													{person.character && (
-														<p className="character">as {person.character}</p>
-													)}
-												</div>
-											</>
-										) : (
-											<></>
-										)}
-									</div>
-								) : (
-									<></>
+								return (
+									person.profile_path && (
+										<div className="cast" key={idx}>
+											<div className="cast__image">
+												<Image
+													src={formatPicThumbs(person.profile_path as string)}
+													layout="fill"
+													objectFit="cover"
+												></Image>
+											</div>
+											<div className="cast__info">
+												<Link href={`/people/${person.id}`}>
+													<a className="name">{person.name}</a>
+												</Link>
+												{person.character && (
+													<p className="character">as {person.character}</p>
+												)}
+											</div>
+										</div>
+									)
 								)
 							})}
 						</HorizontalScrollList>

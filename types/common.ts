@@ -1,6 +1,32 @@
 import { MovieResult } from './movies'
 import { TVResult } from './tv'
 
+export interface Comment {
+	author: {
+		_id?: string
+		username?: string
+		followers?: string[]
+		region?: string
+		reputation?: number
+		avatar?: string
+	} | null
+	comment_section_id: string
+	created_at: string
+	depth: number
+	dislikes: string[]
+	last_edit: null | string
+	likes: string[]
+	message: string
+	updated_at: string
+	__v: number
+	_id: string
+	parent_id?: string
+}
+
+export interface Reply extends Comment {
+	parent?: Comment
+}
+
 export interface Genre {
 	id: number
 	name: string

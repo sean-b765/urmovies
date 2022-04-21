@@ -15,7 +15,11 @@ export const formatDate = (YYYYMMDD: string) => {
 }
 
 export const formatRatingClassName = (rating: any) =>
-	Number(rating) > 5 ? (Number(rating) > 7.7 ? 'green' : 'yellow') : 'red'
+	Number(Number(rating).toFixed(1)) > 5
+		? Number(Number(rating).toFixed(1)) > 7.5
+			? 'green'
+			: 'yellow'
+		: 'red'
 
 export const formatLargeNumbers = (num: number) => {
 	if (num > 1_000_000_000)

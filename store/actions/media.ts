@@ -1,3 +1,5 @@
+import { AxiosError } from 'axios'
+import { checkAxiosError } from './checkAxiosError'
 import API from '../../services/api'
 
 export const getDiscover = async (options: {
@@ -185,6 +187,7 @@ export const setRating = async (
 		})
 		return result.data
 	} catch (err) {
+		checkAxiosError(err as AxiosError)
 		return { success: false }
 	}
 }

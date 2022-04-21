@@ -2,8 +2,10 @@ import { NextPage, NextPageContext } from 'next'
 import Image from 'next/image'
 import React from 'react'
 import RatingCard from '../../components/Profile/RatingCard'
+import { formatLargeNumbers } from '../../lib/format'
 import { getUser } from '../../store/actions/user'
 import { Rating } from '../../types/common'
+import { GiStarsStack } from 'react-icons/gi'
 
 interface Props {
 	user: {
@@ -34,14 +36,24 @@ const UserPage: NextPage<Props> = ({ user, ratings, reviews }) => {
 	return (
 		<div className="profile">
 			<div className="profile__user">
-				<Image
-					width={60}
-					height={60}
-					objectFit="cover"
-					src={user?.avatar ? '/default-avatar.jpg' : '/default-avatar.jpg'}
-				/>
+				<div className="profile__user__pic">
+					<Image
+						className="profile__user__pic__avatar"
+						width={170}
+						height={170}
+						objectFit="cover"
+						src={user?.avatar ? '/default-avatar.jpg' : '/default-avatar.jpg'}
+					/>
+					<p>
+						<GiStarsStack />
+						{formatLargeNumbers(user?.reputation)}
+					</p>
+				</div>
+				<h1>{user?.username}</h1>
+				<p>{user?.bio}</p>
 			</div>
 			<div className="profile__ratings">
+				<h2>Latest Ratings</h2>
 				{ratings.map((rating, idx) => {
 					return <RatingCard key={idx} rating={rating} />
 				})}
@@ -61,6 +73,7 @@ export async function getServerSideProps(context: NextPageContext) {
 			user: user.result.user,
 			reviews: user.result.reviews,
 			ratings: user.result.ratings,
+			commentSectionId: `users-${name}`,
 		},
 	}
 }

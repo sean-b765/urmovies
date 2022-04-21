@@ -1,8 +1,6 @@
-import axios from 'axios'
 import { NextPage } from 'next'
 import React from 'react'
 import List from '../../../components/List'
-import { getGeolocation } from '../../../store/actions/geoloc'
 import { getPlaying } from '../../../store/actions/media'
 import { MovieResult } from '../../../types/movies'
 

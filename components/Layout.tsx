@@ -1,21 +1,20 @@
 import Head from 'next/head'
 import { useRouter, Router } from 'next/router'
 import React, { useEffect } from 'react'
-import { getGeolocationThunk } from '../store/actions/geoloc'
+import emitter from '../services/eventEmitter'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { setProfile, setToken } from '../store/slices/auth'
 import { removePreview } from '../store/slices/media'
 import { setLoading } from '../store/slices/misc'
+import Loader from './Loader/Loader'
 import Navbar from './Navbar/Navbar'
 
 const Layout: React.FC<{ children: any }> = ({ children }) => {
 	const dispatch = useAppDispatch()
 	const router = useRouter()
-	const { loading } = useAppSelector((state) => state.misc)
-
-	dispatch(getGeolocationThunk())
 
 	useEffect(() => {
+		// Loading bar/indicator when navigating between pages
 		Router.events.on('routeChangeStart', () => {
 			dispatch(setLoading(true))
 		})
@@ -25,6 +24,15 @@ const Layout: React.FC<{ children: any }> = ({ children }) => {
 		})
 		Router.events.on('routeChangeError', () => {
 			dispatch(setLoading(false))
+		})
+
+		// Loading indicator when performing API requests
+		emitter.on('AXIOS_START', () => {
+			// console.log('start');
+		})
+
+		emitter.on('AXIOS_STOP', () => {
+			// console.log('finish')
 		})
 	}, [])
 
@@ -37,13 +45,6 @@ const Layout: React.FC<{ children: any }> = ({ children }) => {
 			)
 		)
 	}, [router])
-
-	function randomAnimation(min: number, max: number) {
-		// min and max included
-		const rnd = Math.floor(Math.random() * (max - min + 1) + min)
-
-		return `${`loader${rnd}`} 3s cubic-bezier(0.075, 0.82, 0.165, 1) both`
-	}
 
 	return (
 		<>
@@ -59,18 +60,7 @@ const Layout: React.FC<{ children: any }> = ({ children }) => {
 					rel="stylesheet"
 				/>
 			</Head>
-			<div className="loader">
-				<div
-					className={
-						loading
-							? 'loader__progress loader__progress--loading'
-							: 'loader__progress'
-					}
-					style={{
-						animation: loading ? randomAnimation(1, 2) : 'none',
-					}}
-				></div>
-			</div>
+			<Loader />
 			<Navbar />
 			<main>{children}</main>
 		</>

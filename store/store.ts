@@ -2,6 +2,7 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import misc from './slices/misc'
 import media from './slices/media'
 import auth from './slices/auth'
+import comments from './slices/comments'
 
 export function makeStore() {
 	return configureStore({
@@ -9,7 +10,9 @@ export function makeStore() {
 			misc,
 			media,
 			auth,
+			comments,
 		},
+		devTools: process.env.NODE_ENV !== 'production',
 	})
 }
 

@@ -1,8 +1,72 @@
 .profile {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4rem;
+
+  &__user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    h1 {
+      margin-block: .7rem 1.5rem;
+    }
+
+    &__pic {
+      position: relative;
+      border: thick solid $blue;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      overflow: hidden;
+      background: $blue;
+
+      * {
+        margin: 0;
+      }
+      
+      &__avatar {
+        z-index: 1;
+      }
+
+      p {
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translate(-50%, 0);
+        background: $dark;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: .2rem 1rem .6rem 1rem;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        z-index: 2;
+
+        svg {
+          margin-right: .5rem;
+          fill: rgb(255, 221, 30);
+        }
+      }
+    }
+  }
 
   &__ratings {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
     width: 100%;
+
+    h2 {
+      margin-bottom: 1rem;
+    }
   }
 }
