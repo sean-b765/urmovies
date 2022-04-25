@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { AiOutlineLogin } from 'react-icons/ai'
 import { useAppSelector } from '../../store/hooks'
 import Dropdown from './Dropdown'
+import Notifications from './Notifications'
 
 const Navbar = () => {
 	const [scrolled, setScrolled] = useState(false)
@@ -83,18 +84,21 @@ const Navbar = () => {
 			</nav>
 
 			{profile && token ? (
-				<div className="navbar__profile">
-					<Link href={`/users/${profile.username}`}>
-						<a className="profile-link">
-							<Image
-								src={profile.avatar ? profile.avatar : '/default-avatar.jpg'}
-								objectFit="cover"
-								width={42}
-								height={42}
-							/>
-						</a>
-					</Link>
-				</div>
+				<>
+					<Notifications />
+					<div className="navbar__profile">
+						<Link href={`/users/${profile.username}`}>
+							<a className="profile-link">
+								<Image
+									src={profile.avatar ? profile.avatar : '/default-avatar.jpg'}
+									objectFit="cover"
+									width={42}
+									height={42}
+								/>
+							</a>
+						</Link>
+					</div>
+				</>
 			) : (
 				<>
 					<div className="navbar__login">

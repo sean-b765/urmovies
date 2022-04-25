@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { getGeolocationThunk } from '../actions/geoloc'
 
 export interface InitialDataState {
@@ -6,6 +6,8 @@ export interface InitialDataState {
 	time_zone: string
 	lang: string
 	loading: boolean
+	isEstablishing: boolean
+	isConnected: boolean
 }
 
 const initialState: InitialDataState = {
@@ -13,6 +15,8 @@ const initialState: InitialDataState = {
 	time_zone: '',
 	lang: 'en',
 	loading: false,
+	isEstablishing: false,
+	isConnected: false,
 }
 
 export const miscSlice = createSlice({
@@ -21,6 +25,13 @@ export const miscSlice = createSlice({
 	reducers: {
 		setLoading(state, action) {
 			state.loading = action.payload
+		},
+		establishSocketConnection(state) {
+			state.isEstablishing = true
+		},
+		socketConnected(state) {
+			state.isConnected = true
+			state.isEstablishing = true
 		},
 	},
 	extraReducers: (builder) => {
@@ -35,6 +46,7 @@ export const miscSlice = createSlice({
 	},
 })
 
-export const { setLoading } = miscSlice.actions
+export const { setLoading, establishSocketConnection, socketConnected } =
+	miscSlice.actions
 
 export default miscSlice.reducer

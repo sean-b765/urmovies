@@ -19,9 +19,18 @@
     padding: .5rem !important;
 
     svg {
-      fill: $light;
       color: $light;
-      stroke: $light;
+      font-size: 1rem;
+    }
+  }
+
+  &--opaque {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .5rem !important;
+
+    svg {
       font-size: 1rem;
     }
   }
@@ -31,5 +40,14 @@
   }
   &--edit {
     background: $neutral;
+  }
+  &--submit {
+    background: $success;
+  }
+
+  &--like {
+    svg {
+      color: $neutral;
+    }
   }
 }

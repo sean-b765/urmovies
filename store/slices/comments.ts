@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Comment, Reply } from '../../types/common'
-import { fetchCommentsThunk } from '../actions/comments'
+import {
+	deleteCommentThunk,
+	editCommentThunk,
+	fetchCommentsThunk,
+	postCommentThunk,
+} from '../actions/comments'
 
 export interface InitialDataState {
 	comments: Array<Comment>
@@ -42,6 +47,40 @@ export const commentsSlice = createSlice({
 
 				state.comments = comments
 				state.replies = replies
+			})
+			.addCase(deleteCommentThunk.fulfilled, (state, action) => {
+				// Deleted comment in DB
+				if (action?.payload?.success && !action?.payload?.result) {
+					state.comments = state.comments.filter(
+						(comment) => !action?.payload?.deleted_ids?.includes(comment._id)
+					)
+				}
+				// Removed comment - kept replies
+				if (action?.payload?.success && action?.payload?.result) {
+					state.comments = state.comments.map((comment) => {
+						return comment._id === action?.payload?.result?._id
+							? action?.payload?.result
+							: comment
+					})
+				}
+			})
+			.addCase(editCommentThunk.fulfilled, (state, action) => {
+				if (!action?.payload?.success) return
+
+				state.comments = state.comments.map((comment) => {
+					return comment._id === action?.payload?.result?._id
+						? {
+								...comment,
+								message: action?.payload?.result?.message,
+								last_edit: action?.payload?.result?.last_edit,
+						  }
+						: comment
+				})
+			})
+			.addCase(postCommentThunk.fulfilled, (state, action) => {
+				if (!action?.payload?.success) return
+
+				state.comments = [...state.comments, action.payload.result]
 			})
 	},
 })

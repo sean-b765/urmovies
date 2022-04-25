@@ -7,6 +7,25 @@
   gap: 2.5rem;
   padding-bottom: 7rem;
 
+  form {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    textarea {
+      flex: 7;
+      padding: .7rem .5rem;
+      border: none;
+      resize: none;
+    }
+    .btn {
+      flex: 1;
+      color: $light;
+    }
+  }
+
   .thread {
     position: relative;
     max-width: 1000px;
@@ -112,9 +131,16 @@
         }
 
         .timestamp {
-          font-size: .9rem;
+          font-size: .85rem;
           font-family: 'Roboto Mono';
           opacity: .9;
+
+          span {
+            font-family: 'Roboto Mono';
+            font-size: .75rem;
+            opacity: .75;
+            font-style: italic;
+          }
         }
       }
       .message {

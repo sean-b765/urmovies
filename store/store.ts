@@ -3,6 +3,8 @@ import misc from './slices/misc'
 import media from './slices/media'
 import auth from './slices/auth'
 import comments from './slices/comments'
+import notifications from './slices/notifications'
+import socketMiddleware from './middleware/socket'
 
 export function makeStore() {
 	return configureStore({
@@ -11,8 +13,11 @@ export function makeStore() {
 			media,
 			auth,
 			comments,
+			notifications,
 		},
 		devTools: process.env.NODE_ENV !== 'production',
+		middleware: (getDefaultMiddleware) =>
+			getDefaultMiddleware().concat(socketMiddleware),
 	})
 }
 

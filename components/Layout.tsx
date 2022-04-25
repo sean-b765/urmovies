@@ -2,10 +2,10 @@ import Head from 'next/head'
 import { useRouter, Router } from 'next/router'
 import React, { useEffect } from 'react'
 import emitter from '../services/eventEmitter'
-import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { useAppDispatch } from '../store/hooks'
 import { setProfile, setToken } from '../store/slices/auth'
 import { removePreview } from '../store/slices/media'
-import { setLoading } from '../store/slices/misc'
+import { establishSocketConnection, setLoading } from '../store/slices/misc'
 import Loader from './Loader/Loader'
 import Navbar from './Navbar/Navbar'
 
@@ -13,6 +13,7 @@ const Layout: React.FC<{ children: any }> = ({ children }) => {
 	const dispatch = useAppDispatch()
 	const router = useRouter()
 
+	// One-off events performed on load
 	useEffect(() => {
 		// Loading bar/indicator when navigating between pages
 		Router.events.on('routeChangeStart', () => {
@@ -34,6 +35,8 @@ const Layout: React.FC<{ children: any }> = ({ children }) => {
 		emitter.on('AXIOS_STOP', () => {
 			// console.log('finish')
 		})
+
+		dispatch(establishSocketConnection())
 	}, [])
 
 	useEffect(() => {
