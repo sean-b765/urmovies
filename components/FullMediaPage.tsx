@@ -262,7 +262,7 @@ const FullMediaPage = () => {
 			) : (
 				<></>
 			)}
-			{recommendations?.result.length ? (
+			{recommendations?.result?.length ? (
 				<section className="media__recommended">
 					<div className="media__recommended__wrapper">
 						<HorizontalScrollList>

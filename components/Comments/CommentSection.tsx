@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import { AnimatePresence } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import {
 	fetchCommentsThunk,
@@ -20,19 +20,21 @@ const CommentSection: React.FC<{ commentSectionId: string }> = ({
 		)
 	}, [])
 
-	const { comments, replies, pending } = useAppSelector(
+	const { comments, replies, loading } = useAppSelector(
 		(state) => state.comments
 	)
 
-	const [comment, setComment] = useState({ message: '' })
+	const [editComment, setEditComment] = useState({ message: '' })
 
 	function handlePost() {
-		dispatch(postCommentThunk({ commentSectionId, message: comment.message }))
+		dispatch(
+			postCommentThunk({ commentSectionId, message: editComment.message })
+		)
 	}
 
 	return (
 		<section className="comments">
-			{!pending ? (
+			{!loading ? (
 				<>
 					{
 						<form
@@ -43,24 +45,26 @@ const CommentSection: React.FC<{ commentSectionId: string }> = ({
 						>
 							<textarea
 								name="message"
-								value={comment.message}
-								onChange={(e) => setComment({ message: e.target.value })}
+								value={editComment.message}
+								onChange={(e) => setEditComment({ message: e.target.value })}
 								id="message"
 							></textarea>
 							<input type="submit" value="Post" className="btn btn--post" />
 						</form>
 					}
-					{comments.map((comment, idx) => {
-						return (
-							<Thread
-								key={idx}
-								comment={comment}
-								replies={replies.filter(
-									(potentialReply) => potentialReply.parent_id === comment._id
-								)}
-							/>
-						)
-					})}
+					<AnimatePresence>
+						{comments.map((comment, idx) => {
+							return (
+								<Thread
+									key={idx}
+									comment={comment}
+									replies={replies.filter(
+										(potentialReply) => potentialReply.parent_id === comment._id
+									)}
+								/>
+							)
+						})}
+					</AnimatePresence>
 				</>
 			) : (
 				<>

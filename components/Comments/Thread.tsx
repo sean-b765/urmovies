@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useAppSelector } from '../../store/hooks'
 import { Comment, Reply } from '../../types/common'
 import CommentCard from './Comment'
+import { motion } from 'framer-motion'
 
 const Thread: React.FC<{
 	comment: Comment
@@ -11,27 +12,29 @@ const Thread: React.FC<{
 	const [showThread, setShowThread] = useState(true)
 
 	return (
-		<div className="thread">
-			<AnimatePresence>
-				<CommentCard
-					comment={comment}
-					showThread={showThread}
-					hasReplies={Boolean(replies.length)}
-					setShowThread={() => setShowThread(!showThread)}
-				/>
-			</AnimatePresence>
+		<motion.div
+			className="thread"
+			initial={{ opacity: 0 }}
+			exit={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.4 }}
+		>
+			<CommentCard
+				comment={comment}
+				showThread={showThread}
+				hasReplies={Boolean(replies.length)}
+				setShowThread={() => setShowThread(!showThread)}
+			/>
 
-			<AnimatePresence exitBeforeEnter>
-				{showThread &&
-					replies.map((reply, idx) => (
-						<CommentCard
-							comment={reply}
-							key={idx}
-							setShowThread={() => {}}
-						></CommentCard>
-					))}
-			</AnimatePresence>
-		</div>
+			{showThread &&
+				replies.map((reply, idx) => (
+					<CommentCard
+						comment={reply}
+						key={idx}
+						setShowThread={() => {}}
+					></CommentCard>
+				))}
+		</motion.div>
 	)
 }
 

@@ -7,10 +7,6 @@
   font-size: 1rem;
   position: relative;
 
-  &--viewmore {
-    
-  }
-
   &--circle {
     display: flex;
     align-items: center;
@@ -35,6 +31,18 @@
     }
   }
 
+  &--rounded {
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .5rem !important;
+
+    svg {
+      font-size: 1rem;
+    }
+  }
+
   &--delete {
     background: $error;
   }
@@ -45,9 +53,42 @@
     background: $success;
   }
 
+  &--post {
+    color: $light;
+    background: $blue-light-50;
+    transition: all .3s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+    @media (hover: hover) {
+      &:hover {
+        background: $blue;
+      }
+    }
+  }
+  &--reply {
+    color: $light;
+    background: $blue-light-50;
+    transition: all .3s cubic-bezier(0.075, 0.82, 0.165, 1);
+    padding: .35rem .7rem !important;
+
+    @media (hover: hover) {
+      &:hover {
+        background: $blue;
+      }
+    }
+  }
+
+  &--collapse {
+    color: $light;
+  }
+
   &--like {
     svg {
-      color: $neutral;
+      color: $blue-light;
+    }
+  }
+  &--dislike {
+    svg {
+      color: $red-light;
     }
   }
 }

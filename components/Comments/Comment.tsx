@@ -1,26 +1,36 @@
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { Comment, Reply } from '../../types/common'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import moment from 'moment'
 import Link from 'next/link'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import {
 	MdDelete,
 	MdEdit,
+	MdExpandLess,
+	MdExpandMore,
 	MdOutlineEdit,
 	MdOutlineEditOff,
 } from 'react-icons/md'
 import { BiDotsHorizontalRounded } from 'react-icons/bi'
 import {
 	deleteCommentThunk,
+	dislikeCommentThunk,
 	editCommentThunk,
 	likeComment,
+	likeCommentThunk,
+	replyToCommentThunk,
 } from '../../store/actions/comments'
 import { marked } from 'marked'
 import renderer from '../../lib/marked'
 import { BsCheck2 } from 'react-icons/bs'
-import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai'
+import {
+	AiFillDislike,
+	AiFillLike,
+	AiOutlineDislike,
+	AiOutlineLike,
+} from 'react-icons/ai'
 
 const CommentCard: React.FC<{
 	comment: Comment | Reply
@@ -32,30 +42,26 @@ const CommentCard: React.FC<{
 	const user = useAppSelector((state) => state.auth.profile)
 
 	const [toggleOptions, setToggleOptions] = useState(false)
+	const [toggleReply, setToggleReply] = useState({ show: false, reply: '' })
 
 	const [edit, setEdit] = useState({ editing: false, message: '' })
 
+	const isReply = comment.parent_id ? true : false
+
+	function handleReply() {
+		dispatch(
+			replyToCommentThunk({
+				commentId: comment._id,
+				message: toggleReply.reply,
+			})
+		)
+		setToggleReply({ ...toggleReply, show: false })
+	}
+
 	return (
-		<motion.div
-			initial={{ opacity: 0 }}
-			exit={{ opacity: 0 }}
-			animate={{ opacity: 1 }}
-			transition={{ duration: 0.4 }}
-			className="comment"
-		>
+		<motion.div className="comment">
 			<header className="comment__user" data-collapsible>
 				<div>
-					{!comment.parent_id && hasReplies ? (
-						<button
-							className="btn btn--collapse"
-							onClick={() => setShowThread()}
-						>
-							{showThread ? '[-]' : '[+]'}
-						</button>
-					) : (
-						<></>
-					)}
-
 					<Image
 						style={{ borderRadius: '50%' }}
 						src={
@@ -73,6 +79,17 @@ const CommentCard: React.FC<{
 						<Link href={`/users/${comment?.author?.username}`}>
 							<a>{comment.author?.username}</a>
 						</Link>
+					)}
+
+					{!comment.parent_id && hasReplies ? (
+						<button
+							className="btn btn--collapse"
+							onClick={() => setShowThread()}
+						>
+							{showThread ? <MdExpandLess /> : <MdExpandMore />}
+						</button>
+					) : (
+						<></>
 					)}
 
 					{user?._id && user?._id === comment.author?._id && (
@@ -145,13 +162,6 @@ const CommentCard: React.FC<{
 					className={showThread ? 'message' : 'message message--collapsed'}
 					value={edit.message}
 					onChange={(e) => setEdit({ ...edit, message: e.target.value })}
-					style={{
-						resize: 'none',
-						width: 'calc(100% - 2rem)',
-						padding: '.15rem .5rem',
-						height: '4rem',
-						border: 'none',
-					}}
 				/>
 			) : (
 				<p
@@ -164,23 +174,74 @@ const CommentCard: React.FC<{
 				></p>
 			)}
 
-			{comment.author?._id !== user?._id && (
-				<>
-					<div className="comment__likes">
+			{user?._id && comment.author?._id && (
+				<div className="comment__likes">
+					{comment.author?._id !== user?._id && (
+						<>
+							<button
+								className={`btn btn--like btn--opaque`}
+								onClick={() => {
+									dispatch(likeCommentThunk({ commentId: comment._id }))
+								}}
+							>
+								{comment?.likes?.includes(user?._id) ? (
+									<AiFillLike />
+								) : (
+									<AiOutlineLike />
+								)}
+								{comment?.likes?.length}
+							</button>
+							<button
+								className="btn btn--dislike btn--opaque"
+								onClick={() => {
+									dispatch(dislikeCommentThunk({ commentId: comment._id }))
+								}}
+							>
+								{comment?.dislikes?.includes(user?._id) ? (
+									<AiFillDislike />
+								) : (
+									<AiOutlineDislike />
+								)}
+								{comment?.dislikes?.length}
+							</button>
+						</>
+					)}
+					{!isReply && (
 						<button
-							className="btn btn--like btn--opaque"
-							onClick={async () => {
-								await likeComment({ commentId: comment._id })
-							}}
+							className="btn btn--reply btn--rounded"
+							onClick={() =>
+								setToggleReply({ ...toggleReply, show: !toggleReply.show })
+							}
 						>
-							<AiOutlineLike />
+							Reply
 						</button>
-						<button className="btn btn--dislike btn--opaque">
-							<AiOutlineDislike />
-						</button>
-					</div>
-				</>
+					)}
+				</div>
 			)}
+
+			<AnimatePresence>
+				{toggleReply.show && user?._id && (
+					<motion.form
+						initial={{ opacity: 0 }}
+						exit={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						transition={{ duration: 0.4 }}
+						onSubmit={(e) => {
+							e.preventDefault()
+							handleReply()
+						}}
+					>
+						<textarea
+							className="comment__reply"
+							value={toggleReply.reply}
+							onChange={(e) =>
+								setToggleReply({ ...toggleReply, reply: e.target.value })
+							}
+						/>
+						<input type="submit" value="Post" className="btn btn--post" />
+					</motion.form>
+				)}
+			</AnimatePresence>
 		</motion.div>
 	)
 }
