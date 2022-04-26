@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import moment from 'moment'
 
 export interface Notification {
 	message: string
@@ -11,24 +12,35 @@ export interface Notification {
 }
 
 export interface InitialDataState {
-	notifications: Array<Notification>
+	read: Array<Notification>
+	unread: Array<Notification>
 	pending: boolean
 }
 
 const initialState: InitialDataState = {
-	notifications: [],
-	pending: true,
+	read: [],
+	unread: [],
+	pending: false,
 }
 
 export const notificationsSlice = createSlice({
 	name: 'notifications',
 	initialState,
 	reducers: {
-		setNotifications(state, action: PayloadAction<any>) {
-			state.notifications = action.payload
+		setNotifications(state, action: PayloadAction<Array<Notification>>) {
+			state.read = action.payload.filter((alert) => alert.read)
+			state.unread = action.payload.filter((alert) => !alert.read)
 		},
-		addNotification(state, action: PayloadAction<any>) {
-			state.notifications?.push(action.payload)
+		addNotification(state, action: PayloadAction<Notification>) {
+			action.payload.read
+				? (state.read = [action.payload, ...state.read])
+				: (state.unread = [action.payload, ...state.unread])
+		},
+		markRead(state, action: PayloadAction<Notification>) {
+			state.read = [action.payload, ...state.read]
+			state.unread = state.unread.filter(
+				(notif) => notif._id !== action.payload._id
+			)
 		},
 	},
 	// extraReducers: (builder) => {
@@ -52,6 +64,7 @@ export const notificationsSlice = createSlice({
 	// },
 })
 
-export const { setNotifications, addNotification } = notificationsSlice.actions
+export const { setNotifications, addNotification, markRead } =
+	notificationsSlice.actions
 
 export default notificationsSlice.reducer
