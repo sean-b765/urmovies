@@ -1,5 +1,7 @@
+import { PayloadAction } from '@reduxjs/toolkit'
 import { Middleware } from 'redux'
 import { io, Socket } from 'socket.io-client'
+import { logout, setProfile, setToken } from '../slices/auth'
 import { establishSocketConnection, socketConnected } from '../slices/misc'
 import {
 	addNotification,
@@ -11,26 +13,39 @@ const socketMiddleware: Middleware = (store) => {
 	let socket: Socket
 
 	return function wrapDispatch(next) {
-		return function handleAction(action) {
-			console.log(store.getState())
+		return function handleAction(action: PayloadAction) {
+			const state = store.getState()
 
-			const authSlice = store.getState()?.auth
+			const auth = state?.auth
+
+			const isConnected = state?.misc?.isConnected && socket.connected
+
+			console.log(isConnected, action.type)
 
 			// When establishSocketConnection() is dispatched, we initialize socket
 			// 	Only establish a connection if the user is authenticated
-			if (establishSocketConnection.match(action) && authSlice?.token) {
+			if (establishSocketConnection.match(action)) {
 				socket = io('http://localhost:5000')
 
+				// Authenticate on connected event
 				socket.on('connected', () => {
-					console.log('socket connection established')
-
 					store.dispatch(socketConnected())
-					socket.emit('new-user', {
-						userId: authSlice?.profile?._id,
-						token: authSlice?.token,
+					socket.emit('authenticate', {
+						token: auth?.token,
 					})
 				})
 
+				/**
+				 * Events below
+				 */
+
+				// Token is checked when establishing socket connection as well
+				//  on expired-token event user should be logged out
+				socket.on('expired-token', (data) => {
+					store.dispatch(logout())
+				})
+
+				// Receive notifications from host after being authenticated
 				socket.on('receive-notifications', (notifs) => {
 					if (notifs?.notifications?.length)
 						store.dispatch(
@@ -38,8 +53,17 @@ const socketMiddleware: Middleware = (store) => {
 						)
 				})
 
+				// Comment-liked event
 				socket.on('comment-liked', (data) => {
-					store.dispatch(addNotification({ message: data }))
+					store.dispatch(addNotification(data))
+				})
+			}
+
+			// setToken calls when JWT is received from server
+			//  Authenticate this JWT with socket to be identified
+			if (setToken.match(action) && isConnected) {
+				socket.emit('authenticate', {
+					token: action.payload,
 				})
 			}
 
