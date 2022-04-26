@@ -2,21 +2,54 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Comment, Reply } from '../../types/common'
 import {
 	deleteCommentThunk,
+	dislikeCommentThunk,
 	editCommentThunk,
 	fetchCommentsThunk,
+	likeCommentThunk,
 	postCommentThunk,
+	replyToCommentThunk,
 } from '../actions/comments'
 
 export interface InitialDataState {
 	comments: Array<Comment>
 	replies: Array<Reply>
 	pending: boolean
+	loading: boolean
 }
 
 const initialState: InitialDataState = {
 	comments: [],
 	replies: [],
-	pending: true,
+	pending: false,
+	loading: true,
+}
+
+const patchLikes = (state: InitialDataState, action: PayloadAction<any>) => {
+	state.pending = false
+	if (!action?.payload?.success) return
+	const isReply = action?.payload?.result?.parent_id
+
+	if (isReply) {
+		state.replies = state.replies.map((cmt: any) => {
+			return cmt._id === action?.payload?.result?._id
+				? {
+						...cmt,
+						likes: action?.payload?.result?.likes,
+						dislikes: action?.payload?.result?.dislikes,
+				  }
+				: cmt
+		})
+	} else {
+		state.comments = state.comments.map((cmt: any) => {
+			return cmt._id === action?.payload?.result?._id
+				? {
+						...cmt,
+						likes: action?.payload?.result?.likes,
+						dislikes: action?.payload?.result?.dislikes,
+				  }
+				: cmt
+		})
+	}
 }
 
 export const commentsSlice = createSlice({
@@ -33,10 +66,25 @@ export const commentsSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(fetchCommentsThunk.pending, (state) => {
+				state.loading = true
+			})
+			.addCase(deleteCommentThunk.pending, (state) => {
+				state.pending = true
+			})
+			.addCase(editCommentThunk.pending, (state) => {
+				state.pending = true
+			})
+			.addCase(likeCommentThunk.pending, (state) => {
+				state.pending = true
+			})
+			.addCase(dislikeCommentThunk.pending, (state) => {
+				state.pending = true
+			})
+			.addCase(replyToCommentThunk.pending, (state) => {
 				state.pending = true
 			})
 			.addCase(fetchCommentsThunk.fulfilled, (state, action) => {
-				state.pending = false
+				state.loading = false
 
 				const comments = [] as Array<Comment>
 				const replies = [] as Array<Reply>
@@ -49,9 +97,14 @@ export const commentsSlice = createSlice({
 				state.replies = replies
 			})
 			.addCase(deleteCommentThunk.fulfilled, (state, action) => {
+				state.pending = false
+
 				// Deleted comment in DB
 				if (action?.payload?.success && !action?.payload?.result) {
 					state.comments = state.comments.filter(
+						(comment) => !action?.payload?.deleted_ids?.includes(comment._id)
+					)
+					state.replies = state.replies.filter(
 						(comment) => !action?.payload?.deleted_ids?.includes(comment._id)
 					)
 				}
@@ -65,6 +118,7 @@ export const commentsSlice = createSlice({
 				}
 			})
 			.addCase(editCommentThunk.fulfilled, (state, action) => {
+				state.pending = false
 				if (!action?.payload?.success) return
 
 				state.comments = state.comments.map((comment) => {
@@ -78,10 +132,22 @@ export const commentsSlice = createSlice({
 				})
 			})
 			.addCase(postCommentThunk.fulfilled, (state, action) => {
+				state.pending = false
 				if (!action?.payload?.success) return
 
-				state.comments = [...state.comments, action.payload.result]
+				state.comments = [action.payload.result, ...state.comments]
 			})
+			.addCase(likeCommentThunk.fulfilled, patchLikes)
+			.addCase(dislikeCommentThunk.fulfilled, patchLikes)
+			.addCase(
+				replyToCommentThunk.fulfilled,
+				(state, action: PayloadAction<any>) => {
+					state.pending = false
+					if (!action?.payload?.success) return
+
+					state.replies = [action?.payload?.result, ...state.replies]
+				}
+			)
 	},
 })
 

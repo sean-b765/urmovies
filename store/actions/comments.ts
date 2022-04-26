@@ -73,3 +73,43 @@ export async function likeComment(options: { commentId: string }) {
 		return { success: false }
 	}
 }
+
+export const likeCommentThunk = createAsyncThunk(
+	'comments/toggle-like',
+	likeComment
+)
+
+export async function dislikeComment(options: { commentId: string }) {
+	const { commentId } = options
+	try {
+		const result = await API.patch(`/api/v1/comment/${commentId}/dislike`)
+		return result.data
+	} catch (err) {
+		return { success: false }
+	}
+}
+
+export const dislikeCommentThunk = createAsyncThunk(
+	'comments/toggle-dislike',
+	dislikeComment
+)
+
+export async function replyToComment(options: {
+	commentId: string
+	message: string
+}) {
+	const { commentId, message } = options
+	try {
+		const result = await API.post(`/api/v1/comment/${commentId}/reply`, {
+			message,
+		})
+		return result.data
+	} catch (err) {
+		return { success: false }
+	}
+}
+
+export const replyToCommentThunk = createAsyncThunk(
+	'comments/add-reply',
+	replyToComment
+)
