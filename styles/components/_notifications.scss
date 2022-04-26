@@ -1,0 +1,78 @@
+.notifications {
+  position: relative;
+  margin-right: 1.5rem;
+
+  .wrapper {
+    position: absolute;
+    overflow-y: auto;
+    top: 100%;
+    right: 0;
+    width: clamp(200px, 50vw, 400px);
+    height: clamp(200px, 50vh, 300px);
+    background: $blue-dark;
+
+    .notifs {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+  
+      &__item {
+        position: relative;
+        font-size: .8rem;
+        padding: 1rem;
+
+        .timestamp {
+          margin-top: .4rem;
+          font-family: 'Roboto Mono';
+        }
+      }
+    }
+  }
+
+  &__badge  {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $light;
+
+    &--unread {
+      color: $red-light;
+    }
+
+    * {
+      margin: .5rem;
+    }
+  }
+}
+
+.alert {
+  position: fixed;
+  top: 5rem;
+  right: 1rem;
+  padding: 1rem 3rem 1rem 1.5rem;
+  border: thin solid $blue-light;
+  background: $blue-dark;
+  border-radius: 3px;
+  
+  > div {
+    h2 {
+      font-size: 1rem;
+    }
+    p {
+      font-size: .9rem;
+      margin-top: .25rem;
+    }
+  }
+
+  .btn--close {
+    position: absolute;
+    padding: .5rem;
+    right: 0;
+    top: 0;
+
+    svg {
+      color: $light;
+    }
+  }
+}
