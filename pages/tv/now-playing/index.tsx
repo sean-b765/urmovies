@@ -1,6 +1,7 @@
 import { NextPage } from 'next'
 import React from 'react'
 import List from '../../../components/List'
+import Pages from '../../../components/Pagination'
 import { getPlaying } from '../../../store/actions/media'
 import { MovieResult } from '../../../types/movies'
 
@@ -20,9 +21,7 @@ const PlayingTV: NextPage<{
 				<List data={{ result: data.result, type: 'tv' }} />
 			)}
 
-			<div className="pagination">
-				{data?.page} of {data?.pages}
-			</div>
+			<Pages page={data.page} pages={data.pages} />
 		</>
 	)
 }

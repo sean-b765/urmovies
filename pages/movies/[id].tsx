@@ -1,5 +1,6 @@
 import { NextPage } from 'next'
 import React, { useEffect } from 'react'
+import CommentSection from '../../components/Comments/CommentSection'
 import FullMediaPage from '../../components/FullMediaPage'
 import { fetchCommentsThunk } from '../../store/actions/comments'
 import { getMedia, getRecommendations } from '../../store/actions/media'
@@ -24,6 +25,7 @@ const MoviePage: NextPage<{
 	return (
 		<>
 			<FullMediaPage />
+			<CommentSection commentSectionId={commentSectionId} />
 		</>
 	)
 }

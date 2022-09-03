@@ -24,6 +24,7 @@ const TVPage: NextPage<{ data: SingleTVResult; commentSectionId: string }> = ({
 }
 
 export async function getServerSideProps(context: any) {
+	console.log('TV ID', context.query.id)
 	const result = await getMedia({ mediaId: context.query.id, media: 'tv' })
 
 	const recommendations = await getRecommendations({

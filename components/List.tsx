@@ -15,6 +15,7 @@ const List: React.FC<{
 }> = ({ data }) => {
 	const dispatch = useAppDispatch()
 	const { showPreview } = useAppSelector((state) => state.media)
+
 	return (
 		<div className="list">
 			<>

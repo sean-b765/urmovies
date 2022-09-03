@@ -1,7 +1,7 @@
-import axios from 'axios'
 import { NextPage } from 'next'
 import React from 'react'
 import List from '../../../components/List'
+import Pages from '../../../components/Pagination'
 import { getPopular } from '../../../store/actions/media'
 import { MovieResult } from '../../../types/movies'
 
@@ -21,9 +21,7 @@ const PopularTV: NextPage<{
 				<List data={{ result: data.result, type: 'tv' }} />
 			)}
 
-			<div className="pagination">
-				{data?.page} of {data?.pages}
-			</div>
+			<Pages page={data.page} pages={data.pages} />
 		</>
 	)
 }

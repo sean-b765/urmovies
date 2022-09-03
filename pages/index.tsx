@@ -1,6 +1,7 @@
 import { NextPage } from 'next'
 import React from 'react'
 import List from '../components/List'
+import Pages from '../components/Pagination'
 import { getDiscover } from '../store/actions/media'
 import { MovieResult } from '../types/movies'
 import { TVResult } from '../types/tv'
@@ -13,13 +14,13 @@ interface Props {
 }
 
 const Discover: NextPage<{ data: Props }> = ({ data }) => {
-	return (
+	return data ? (
 		<>
 			{!data?.success ? <></> : <List data={{ result: data.result }} />}
-			<div className="pagination">
-				{data.page} of {data.pages}
-			</div>
+			<Pages page={data.page} pages={data.pages} />
 		</>
+	) : (
+		<></>
 	)
 }
 

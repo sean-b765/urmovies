@@ -1,9 +1,10 @@
+import { Skeleton } from '@mui/material'
 import moment from 'moment'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { AiFillStar } from 'react-icons/ai'
-import { formatPicThumbs, formatRatingClassName } from '../../lib/format'
+import { formatPic, formatRatingClassName } from '../../lib/format'
 import { usePromiseEffect } from '../../lib/hooks'
 import { getTitle } from '../../lib/util'
 import { getMediaPreview } from '../../store/actions/media'
@@ -21,12 +22,14 @@ const RatingCard: React.FC<{ rating: Rating }> = ({ rating }) => {
 		return result.result
 	}, [])
 
+	if (!getTitle(media)) return <></>
+
 	return (
 		<div className="ratingcard">
 			<div className="ratingcard__backdrop">
 				<Image
 					layout="fill"
-					src={formatPicThumbs(media.backdrop_path as string)}
+					src={formatPic(media?.backdrop_path as string)}
 					objectFit="cover"
 				/>
 			</div>

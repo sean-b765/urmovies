@@ -29,21 +29,6 @@
       }
     }
   }
-
-  &__badge  {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: $light;
-
-    &--unread {
-      color: $red-light;
-    }
-
-    * {
-      margin: .5rem;
-    }
-  }
 }
 
 .alert {

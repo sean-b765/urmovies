@@ -31,8 +31,6 @@ interface Props {
 }
 
 const UserPage: NextPage<Props> = ({ user, ratings, reviews }) => {
-	console.log(user)
-
 	return (
 		<div className="profile">
 			<div className="profile__user">
@@ -66,13 +64,15 @@ const UserPage: NextPage<Props> = ({ user, ratings, reviews }) => {
 export async function getServerSideProps(context: NextPageContext) {
 	const { name } = context.query
 
-	const user = await getUser(name as string)
+	const result = await getUser(name as string)
+
+	console.log(result)
 
 	return {
 		props: {
-			user: user.result.user,
-			reviews: user.result.reviews,
-			ratings: user.result.ratings,
+			user: result.result.user,
+			reviews: result.result.reviews,
+			ratings: result.result.ratings,
 			commentSectionId: `users-${name}`,
 		},
 	}

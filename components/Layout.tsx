@@ -1,3 +1,4 @@
+import { AnimatePresence } from 'framer-motion'
 import Head from 'next/head'
 import { useRouter, Router } from 'next/router'
 import React, { useEffect } from 'react'
@@ -8,6 +9,7 @@ import { removePreview } from '../store/slices/media'
 import { establishSocketConnection, setLoading } from '../store/slices/misc'
 import Loader from './Loader/Loader'
 import Navbar from './Navbar/Navbar'
+import Popup from './Popup/Popup'
 
 const Layout: React.FC<{ children: any }> = ({ children }) => {
 	const dispatch = useAppDispatch()
@@ -39,6 +41,7 @@ const Layout: React.FC<{ children: any }> = ({ children }) => {
 		dispatch(establishSocketConnection())
 	}, [])
 
+	// When route changes
 	useEffect(() => {
 		dispatch(removePreview())
 		dispatch(setToken(localStorage.getItem('authtoken') || ''))
@@ -51,18 +54,7 @@ const Layout: React.FC<{ children: any }> = ({ children }) => {
 
 	return (
 		<>
-			<Head>
-				<link rel="preconnect" href="https://fonts.googleapis.com" />
-				<link
-					rel="preconnect"
-					href="https://fonts.gstatic.com"
-					crossOrigin="true"
-				/>
-				<link
-					href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Roboto+Mono:wght@500&display=swap"
-					rel="stylesheet"
-				/>
-			</Head>
+			<Popup />
 			<Loader />
 			<Navbar />
 			<main>{children}</main>

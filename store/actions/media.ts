@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios'
 import { checkAxiosError } from './checkAxiosError'
 import API from '../../services/api'
+import { createAsyncThunk } from '@reduxjs/toolkit'
 
 export const getDiscover = async (options: {
 	page: string
@@ -176,11 +177,12 @@ export const getUpcoming = async (options: {
 	}
 }
 
-export const setRating = async (
-	media: string,
-	mediaId: string,
+export const setRating = async (options: {
+	media: string
+	mediaId: string
 	rating: number
-) => {
+}) => {
+	const { media, mediaId, rating } = options
 	try {
 		const result = await API.post(`/api/v1/media/${mediaId}/rate/${media}`, {
 			rating,
@@ -192,9 +194,20 @@ export const setRating = async (
 	}
 }
 
+export const setRatingThunk = createAsyncThunk('media/ratings/set', setRating)
+
 export const getRatings = async (media: string, mediaId: string) => {
 	try {
 		const result = await API.get(`/api/v1/media/${mediaId}/ratings/${media}`)
+		return result.data
+	} catch (err) {
+		return { success: false }
+	}
+}
+
+export const getMyRating = async (media: string, mediaId: string) => {
+	try {
+		const result = await API.get(`/api/v1/media/${mediaId}/my-rating/${media}`)
 		return result.data
 	} catch (err) {
 		return { success: false }

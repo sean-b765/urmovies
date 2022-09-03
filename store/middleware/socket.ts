@@ -7,6 +7,7 @@ import {
 	addNotification,
 	Notification,
 	setNotifications,
+	setPopup,
 } from '../slices/notifications'
 
 const socketMiddleware: Middleware = (store) => {
@@ -20,11 +21,12 @@ const socketMiddleware: Middleware = (store) => {
 
 			const isConnected = state?.misc?.isConnected && socket.connected
 
-			console.log(isConnected, action.type)
+			console.log(action.type)
 
 			// When establishSocketConnection() is dispatched, we initialize socket
 			// 	Only establish a connection if the user is authenticated
 			if (establishSocketConnection.match(action)) {
+				// socket = io('https://urmovies.herokuapp.com')
 				socket = io('http://localhost:5000')
 
 				// Authenticate on connected event
@@ -42,7 +44,11 @@ const socketMiddleware: Middleware = (store) => {
 				// Token is checked when establishing socket connection as well
 				//  on expired-token event user should be logged out
 				socket.on('expired-token', (data) => {
-					store.dispatch(logout())
+					console.log(data)
+
+					// console.log('FORCE LOGOUT')
+
+					// store.dispatch(logout())
 				})
 
 				// Receive notifications from host after being authenticated
@@ -51,11 +57,13 @@ const socketMiddleware: Middleware = (store) => {
 						store.dispatch(
 							setNotifications(notifs.notifications as Array<Notification>)
 						)
+					console.log('received notifications', notifs.notifications)
 				})
 
 				// Comment-liked event
 				socket.on('comment-liked', (data) => {
 					store.dispatch(addNotification(data))
+					store.dispatch(setPopup(data))
 				})
 			}
 

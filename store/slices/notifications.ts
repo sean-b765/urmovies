@@ -9,15 +9,18 @@ export interface Notification {
 	created_at: string
 	updated_at: string
 	_id: string
+	href: string | null
 }
 
 export interface InitialDataState {
+	popup: Notification | null
 	read: Array<Notification>
 	unread: Array<Notification>
 	pending: boolean
 }
 
 const initialState: InitialDataState = {
+	popup: null,
 	read: [],
 	unread: [],
 	pending: false,
@@ -42,6 +45,12 @@ export const notificationsSlice = createSlice({
 				(notif) => notif._id !== action.payload._id
 			)
 		},
+		setPopup(state, action: PayloadAction<Notification>) {
+			state.popup = action.payload
+		},
+		dismissPopup(state) {
+			state.popup = null
+		},
 	},
 	// extraReducers: (builder) => {
 	// 	builder
@@ -64,7 +73,12 @@ export const notificationsSlice = createSlice({
 	// },
 })
 
-export const { setNotifications, addNotification, markRead } =
-	notificationsSlice.actions
+export const {
+	setNotifications,
+	addNotification,
+	markRead,
+	setPopup,
+	dismissPopup,
+} = notificationsSlice.actions
 
 export default notificationsSlice.reducer

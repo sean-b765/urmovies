@@ -13,6 +13,7 @@ import {
 import Image from 'next/image'
 import {
 	formatLargeNumbers,
+	formatLargeText,
 	formatPic,
 	formatPicThumbs,
 	formatRatingClassName,
@@ -20,17 +21,113 @@ import {
 import Link from 'next/link'
 import { BsFillPersonFill } from 'react-icons/bs'
 import { AiFillStar } from 'react-icons/ai'
+import { Alert, Box, Fade, Grid, Modal, Typography } from '@mui/material'
 
 const MediaPreview = () => {
 	const { result } = useAppSelector((state) => state.media.preview)
+	const { showPreview } = useAppSelector((state) => state.media)
 	const dispatch = useAppDispatch()
+
+	const handleClose = () => dispatch(removePreview())
+
+	return (
+		<Modal open={showPreview} onClose={handleClose}>
+			<Box>
+				{/* Mobiles */}
+				<Grid
+					container
+					sx={{
+						display: { xs: 'flex', sm: 'none' },
+						position: 'absolute',
+						transform: 'translate(-50%, -50%)',
+						left: '50%',
+						top: '50%',
+						width: 'auto',
+						flexDirection: 'column',
+					}}
+				>
+					<Grid
+						item
+						sx={{
+							position: 'relative',
+							height: 'clamp(300px, 20vw, 400px)',
+							width: '90vw',
+							py: 4,
+							px: 3,
+						}}
+					>
+						<Typography variant="h4">{getTitle(result)}</Typography>
+
+						<Typography variant="body1">
+							{formatLargeText(result?.overview as string, 200)}
+						</Typography>
+						<div className="backdrop">
+							<Image
+								src={formatPic(result.backdrop_path as string)}
+								layout="fill"
+								objectFit="cover"
+								priority={true}
+							/>
+						</div>
+					</Grid>
+				</Grid>
+				{/* Desktops/Tablets */}
+				<Grid
+					container
+					sx={{
+						display: { xs: 'none', sm: 'flex' },
+						position: 'absolute',
+						transform: 'translate(-50%, -50%)',
+						left: '50%',
+						top: '50%',
+						width: 'auto',
+						flexWrap: 'nowrap',
+					}}
+				>
+					<Grid
+						item
+						position="relative"
+						height="clamp(300px, 20vw, 400px)"
+						width="clamp(200px, 20vw, 300px)"
+					>
+						<Image
+							src={formatPic(result.poster_path as string)}
+							layout="fill"
+							objectFit="cover"
+							priority={true}
+						/>
+					</Grid>
+					<Grid
+						item
+						sx={{
+							position: 'relative',
+							height: 'clamp(300px, 20vw, 400px)',
+							width: 'clamp(200px, 50vw, 500px)',
+							py: 2,
+							px: 3,
+						}}
+					>
+						<Typography variant="h4">{getTitle(result)}</Typography>
+
+						<Typography variant="body1">
+							{formatLargeText(result?.overview as string, 200)}
+						</Typography>
+						<div className="backdrop">
+							<Image
+								src={formatPic(result.backdrop_path as string)}
+								layout="fill"
+								objectFit="cover"
+								priority={true}
+							/>
+						</div>
+					</Grid>
+				</Grid>
+			</Box>
+		</Modal>
+	)
 
 	return (
 		<motion.div
-			initial={{ opacity: 0 }}
-			animate={{ opacity: 1 }}
-			exit={{ opacity: 0 }}
-			transition={{ duration: 0.48 }}
 			className="preview"
 			onClick={(e: any) => {
 				if (!e.target.dataset.canclick) return
@@ -83,22 +180,10 @@ const MediaPreview = () => {
 									<a>{getTitle(result)}</a>
 								</Link>
 							</h2>
-							<p>
-								{result.overview?.substring(0, 250).trim()}
-								{Number(result.overview?.length) > 250 ? '...' : ''}
-							</p>
+							<p>{formatLargeText(result?.overview as string, 250)}</p>
 						</div>
 					</header>
-					<div className="card__image">
-						{result.backdrop_path && (
-							<Image
-								src={formatPic(result.backdrop_path as string)}
-								layout="fill"
-								objectFit="cover"
-								priority={true}
-							/>
-						)}
-					</div>
+					<div className="card__image"></div>
 				</div>
 				<div className="mediapreview__thumb">
 					{result.poster_path && (

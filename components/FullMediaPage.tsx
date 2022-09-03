@@ -22,7 +22,7 @@ import { AnimatePresence } from 'framer-motion'
 import MediaPreview from './MediaPreview'
 import { setPreview, toggleFullscreenPic } from '../store/slices/media'
 import Link from 'next/link'
-import { Comment, Genre, Reply } from '../types/common'
+import { Genre } from '../types/common'
 import { AiOutlineClose } from 'react-icons/ai'
 import { BsCalendarDate } from 'react-icons/bs'
 import { BiTime } from 'react-icons/bi'
@@ -48,7 +48,9 @@ const FullMediaPage = () => {
 		(state) => state.media
 	)
 
-	const watchProviders = getProviders(providers[countryCode])
+	const watchProviders = providers
+		? getProviders(providers[countryCode])
+		: { flatrate: [], buy: [], rent: [] }
 
 	return (
 		<div className="media">
