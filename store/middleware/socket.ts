@@ -26,8 +26,8 @@ const socketMiddleware: Middleware = (store) => {
 			// When establishSocketConnection() is dispatched, we initialize socket
 			// 	Only establish a connection if the user is authenticated
 			if (establishSocketConnection.match(action)) {
-				// socket = io('https://urmovies.herokuapp.com')
-				socket = io('http://localhost:5000')
+				socket = io('https://urmovies.herokuapp.com')
+				// socket = io('http://localhost:5000')
 
 				// Authenticate on connected event
 				socket.on('connected', () => {
